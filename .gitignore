@@ -1,4 +1,6 @@
 **/.terraform/
-**/node_modules
 **/.terraform.lock.hcl
+
+**/node_modules/
+**/build/
 **/*.zip
