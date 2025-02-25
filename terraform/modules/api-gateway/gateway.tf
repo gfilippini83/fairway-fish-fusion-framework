@@ -28,6 +28,7 @@ resource "aws_api_gateway_stage" "stage" {
   deployment_id = aws_api_gateway_deployment.api_deployment.id
   rest_api_id   = aws_api_gateway_rest_api.backend_api.id
   stage_name    = var.env
+  depends_on    = [aws_api_gateway_account.cloudwatch_account]
 }
 
 

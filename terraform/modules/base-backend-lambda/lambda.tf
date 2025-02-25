@@ -1,8 +1,8 @@
 resource "aws_lambda_function" "example" {
   function_name = "base-backend-lambda"
   runtime       = "nodejs20.x"
-  handler       = "index.handler" # Default handler for Node.js
-  filename      = "${path.module}/../../../framework/lambdas/base-backend-lambda/lambda_function.zip"  # Placeholder, CodeDeploy will handle this
+  handler       = "index.handler"                                                                     # Default handler for Node.js
+  filename      = "${path.module}/../../../framework/lambdas/base-backend-lambda/lambda_function.zip" # Placeholder, CodeDeploy will handle this
   role          = aws_iam_role.lambda_role.arn
   publish       = true # Important for CodeDeploy
 
