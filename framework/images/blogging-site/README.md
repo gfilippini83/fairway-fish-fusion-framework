@@ -61,9 +61,23 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/m
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+### Deployment Manually
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Log in using the following command: `aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <your-account-id>.dkr.ecr.<your-region>.amazonaws.com`
+
+- Build the image with docker: `docker build -t blogging-site-image .`
+
+- Tag the image with docker: `docker tag your-react-frontend-image <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/blogging-site-image:latest`
+
+- Push the image to ECR: `docker push <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/blogging-site-image:latest`
+
+- Delete existing pods
+    
+    - Set your kubectl config if you haven't already like so: `aws eks update-kubeconfig --name YOUR_CLUSTER_NAME --region YOUR_AWS_REGION`
+
+- Get the pod IDs from the namespace: `kubectl get pods -n <namespace>`
+
+- Delete All pods in the namespace to repull latest tagged image: `kubectl delete pod <pod-id> -n <namespace>`
 
 ### `npm run build` fails to minify
 

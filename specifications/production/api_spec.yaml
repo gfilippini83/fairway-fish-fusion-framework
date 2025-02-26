@@ -9,7 +9,7 @@ paths:
       responses:
         '200':
           description: Successful response
-      x-amazon-apigateway-integration: # Integration configuration within the spec
+      x-amazon-apigateway-integration:
         credentials: ${apigateway_role_arn}
         uri: ${lambda_invoke_arn}
         passthroughBehavior: when_no_match
@@ -18,7 +18,11 @@ paths:
         requestParameters: {}
         requestTemplates:
           application/json: '{"body": "$input.json(\"$\" )"}'
-      x-amazon-apigateway-method-response: # Method response within the spec
+      x-amazon-apigateway-cors:
+        allowOrigin: ['*']
+        allowMethods: ['GET', 'POST', 'OPTIONS']
+        allowHeaders: ['Content-Type', 'Authorization']
+      x-amazon-apigateway-method-response:
         statusCode: "200"
         responseParameters: {}
         responseModels: {}
