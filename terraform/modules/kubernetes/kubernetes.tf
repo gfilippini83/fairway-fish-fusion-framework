@@ -1,77 +1,51 @@
-# Create an EKS Cluster
-resource "aws_eks_cluster" "main" {
-  name                          = "blogging-cluster" # Replace with your cluster name
-  version                       = "1.31"             # Specify your desired Kubernetes version
-  role_arn                      = aws_iam_role.cluster.arn
-  bootstrap_self_managed_addons = false
 
-  access_config {
-    authentication_mode = "API"
-  }
 
-  kubernetes_network_config {
-    elastic_load_balancing {
-      enabled = true
-    }
-  }
-
-  compute_config {
-    enabled       = true
-    node_pools    = ["general-purpose"]
-    node_role_arn = aws_iam_role.node.arn
-  }
-
-  storage_config {
-    block_storage {
-      enabled = true
-    }
-  }
+# EKS Cluster
+resource "aws_eks_cluster" "eks_cluster" {
+  name     = "my-eks-cluster"
+  version  = "1.27"                            # Or your preferred Kubernetes version
+  role_arn = aws_iam_role.eks_cluster_role.arn # IAM role for the cluster
 
   vpc_config {
-    endpoint_private_access = true
-    endpoint_public_access  = true
-    subnet_ids              = var.subnet_ids # Replace with your subnet IDs
+    subnet_ids = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.cluster_AmazonEKSComputePolicy,
-    aws_iam_role_policy_attachment.cluster_AmazonEKSBlockStoragePolicy,
-    aws_iam_role_policy_attachment.cluster_AmazonEKSLoadBalancingPolicy,
-    aws_iam_role_policy_attachment.cluster_AmazonEKSNetworkingPolicy,
-  ]
+  # Ensure the cluster control plane endpoints are private if you are not using public IPs on worker nodes
+  # private_access = true # Uncomment if you want private access
+
+  tags = {
+    Name = "eks-cluster"
+  }
 }
 
-# Create worker node group
-resource "aws_eks_node_group" "worker_node_group" {
-  cluster_name    = aws_eks_cluster.main.name
-  node_group_name = "worker-node-group"
-  version         = aws_eks_cluster.main.version
-  instance_types  = ["t3.micro"]
-
-  subnet_ids = var.subnet_ids
+# EKS Node Group (Worker Nodes)
+resource "aws_eks_node_group" "eks_nodes" {
+  cluster_name    = aws_eks_cluster.eks_cluster.name
+  node_group_name = "my-eks-node-group"
+  subnet_ids      = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
+  instance_types  = ["t3.micro"]                        # Or your preferred instance types
+  version         = aws_eks_cluster.eks_cluster.version # Important: Match the cluster version
 
   scaling_config {
-    desired_size = 1
-    max_size     = 2
+    desired_size = 2
+    max_size     = 5
     min_size     = 1
   }
-
-  update_config {
-    max_unavailable = 1
-  }
-
   # IAM Role for the worker nodes
-  node_role_arn = aws_iam_role.node.arn
+  node_role_arn = aws_iam_role.eks_node_role.arn
 
-  # Update policy for worker nodes to allow access to ECR if you are using private container registry
-  lifecycle {
-    create_before_destroy = true
+  tags = {
+    Name = "eks-node-group"
   }
+}
 
-  depends_on = [
-    aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly,
-    aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy
-  ]
+# Kubernetes Provider Configuration (After cluster creation)
+provider "kubernetes" {
+  host                   = aws_eks_cluster.eks_cluster.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.eks_cluster.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.auth.token
+}
+
+data "aws_eks_cluster_auth" "auth" {
+  name = aws_eks_cluster.eks_cluster.name
 }

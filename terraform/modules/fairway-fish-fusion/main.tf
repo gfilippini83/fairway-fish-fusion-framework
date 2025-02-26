@@ -13,6 +13,7 @@ module "api_gateway" {
 module "kubernetes" {
   source     = "../kubernetes"
   subnet_ids = module.vpc_configuration.vpc_subnets
+  env        = local.env
 }
 
 module "vpc_configuration" {
