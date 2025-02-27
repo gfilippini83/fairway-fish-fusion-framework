@@ -12,3 +12,9 @@ variable "base_backend_lambda_invoke_arn" {
   type        = string
   description = "ARN of the lambd that we are invoking"
 }
+
+variable "vpc_endpoint_id" {
+  type = string
+  description = "vpc endpoint ID"
+  
+}

@@ -1,10 +1,11 @@
 resource "aws_api_gateway_rest_api" "backend_api" {
   name        = var.api_name
-  description = "Public API Gateway for Lambda function"
+  description = "API Gateway for Lambda function"
   endpoint_configuration {
-    types = ["EDGE"]
+    types            = ["PRIVATE"]
+    vpc_endpoint_ids = [var.vpc_endpoint_id]
   }
-
+  
   body = templatefile("${path.module}/../../../specifications/${var.env}/api_spec.yaml", {
     api_name            = var.api_name,
     lambda_invoke_arn   = var.base_backend_lambda_invoke_arn,

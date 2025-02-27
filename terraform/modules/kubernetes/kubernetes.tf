@@ -7,7 +7,8 @@ resource "aws_eks_cluster" "eks_cluster" {
   role_arn = aws_iam_role.eks_cluster_role.arn # IAM role for the cluster
 
   vpc_config {
-    subnet_ids = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
+    # subnet_ids = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
+    subnet_ids = var.public_vpc_subnets
   }
 
   # Ensure the cluster control plane endpoints are private if you are not using public IPs on worker nodes
@@ -22,7 +23,7 @@ resource "aws_eks_cluster" "eks_cluster" {
 resource "aws_eks_node_group" "eks_nodes" {
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "my-eks-node-group"
-  subnet_ids      = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
+  subnet_ids      = var.public_vpc_subnets
   instance_types  = ["t3.micro"]                        # Or your preferred instance types
   version         = aws_eks_cluster.eks_cluster.version # Important: Match the cluster version
 
