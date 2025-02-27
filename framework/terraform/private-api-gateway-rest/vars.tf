@@ -10,10 +10,11 @@ variable "env" {
 
 variable "base_backend_lambda_invoke_arn" {
   type        = string
-  description = "Invoke ARN of the lambda that we are invoking"
+  description = "ARN of the lambd that we are invoking"
 }
 
-variable "base_backend_lambda_arn" {
-  type        = string
-  description = "ARN of the lambda that we are invoking"
+variable "vpc_endpoint_id" {
+  type = string
+  description = "vpc endpoint ID"
+  
 }

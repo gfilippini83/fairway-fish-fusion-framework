@@ -67,7 +67,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 
 - Build the image with docker: `docker build -t blogging-site-image .`
 
-- Tag the image with docker: `docker tag your-react-frontend-image <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/blogging-site-image:latest`
+- Tag the image with docker: `docker tag blogging-site-image <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/blogging-site-image:latest`
 
 - Push the image to ECR: `docker push <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/blogging-site-image:latest`
 

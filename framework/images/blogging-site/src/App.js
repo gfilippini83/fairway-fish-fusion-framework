@@ -27,8 +27,7 @@ function App() {
 }
 
 async function hitApiGateway() {
-  // const val = axios.get("https://7i0qj22meg.execute-api.us-east-1.amazonaws.com/production/")
-  fetch('https://7i0qj22meg.execute-api.us-east-1.amazonaws.com/production/', {
+  fetch('https://dyl3fm9keg.execute-api.us-east-1.amazonaws.com/production/', {
     method: "GET"
   }).then(function(response) {
     return response.json()

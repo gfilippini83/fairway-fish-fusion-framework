@@ -1,3 +1,3 @@
 env = "production"
 
-enable_vpc = false
+enable_vpc = true

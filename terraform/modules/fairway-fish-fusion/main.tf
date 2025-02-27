@@ -1,6 +1,8 @@
 module "base_backend_lambda" {
-  source = "../base-backend-lambda"
-  env    = local.env
+  source              = "../base-backend-lambda"
+  env                 = local.env
+  private_vpc_subnets = module.vpc_configuration.private_vpc_subnets
+  vpc_id              = module.vpc_configuration.vpc_id
 }
 
 module "api_gateway" {
@@ -8,16 +10,15 @@ module "api_gateway" {
   env                            = local.env
   api_name                       = local.api_name
   base_backend_lambda_invoke_arn = module.base_backend_lambda.lambda_invoke_arn
+  base_backend_lambda_arn        = module.base_backend_lambda.lambda_arn
 }
 
 module "kubernetes" {
-  source     = "../kubernetes"
-  subnet_ids = module.vpc_configuration.vpc_subnets
-  env        = local.env
+  source             = "../kubernetes"
+  public_vpc_subnets = module.vpc_configuration.public_vpc_subnets
+  env                = local.env
 }
 
 module "vpc_configuration" {
-  source     = "../vpc"
-  api_id     = module.api_gateway.api_id
-  enable_vpc = var.enable_vpc
+  source = "../vpc"
 }
