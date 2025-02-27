@@ -64,7 +64,7 @@ resource "aws_iam_policy" "apigateway_policy" {
       {
         Action   = "lambda:InvokeFunction",
         Effect   = "Allow",
-        Resource = var.base_backend_lambda_invoke_arn, # ARN of your Lambda function
+        Resource = var.base_backend_lambda_arn, # ARN of your Lambda function
       },
     ]
   })

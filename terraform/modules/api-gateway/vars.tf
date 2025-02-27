@@ -10,5 +10,10 @@ variable "env" {
 
 variable "base_backend_lambda_invoke_arn" {
   type        = string
-  description = "ARN of the lambd that we are invoking"
+  description = "Invoke ARN of the lambda that we are invoking"
+}
+
+variable "base_backend_lambda_arn" {
+  type        = string
+  description = "ARN of the lambda that we are invoking"
 }
