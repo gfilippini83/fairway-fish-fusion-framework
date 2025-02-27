@@ -19,8 +19,12 @@ function App() {
           Learn React
         </a>
         <button type="button" onClick={hitApiGateway}>
-        Click Me
-      </button>
+          Click Me
+        </button>
+        
+        <a href="https://github.com/gfilippini83/fairway-fish-fusion-framework" target="_blank" rel="noopener noreferrer">
+          Check the code out!
+        </a>
       </header>
     </div>
   );
