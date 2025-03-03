@@ -22,3 +22,8 @@ module "kubernetes" {
 module "vpc_configuration" {
   source = "../vpc"
 }
+
+module "website_cognito" {
+  source = "../cognito"
+  env = local.env
+}

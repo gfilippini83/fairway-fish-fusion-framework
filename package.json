@@ -1,0 +1,26 @@
+{
+  "name": "fairway-fish-fusion-framework",
+  "version": "1.0.0",
+  "description": "Creating infrastructure and code for a fully replicable blogging solution!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext js,jsx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gfilippini83/fairway-fish-fusion-framework.git"
+  },
+  "author": "Garrett Filippini",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gfilippini83/fairway-fish-fusion-framework/issues"
+  },
+  "homepage": "https://github.com/gfilippini83/fairway-fish-fusion-framework#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^16.0.0"
+  }
+}

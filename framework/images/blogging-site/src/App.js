@@ -1,43 +1,72 @@
-import logo from './logo.svg';
+
 import './App.css';
+import ResponsiveNavBar from './components/navbar';
+import { Container } from '@mui/material';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AboutUsPage from './routes/aboutUs';
+import BlogPage from './routes/blog';
+import LandingPage from './routes/landing';
+import LoggedInPage from './routes/loggedIn';
+import LoggedOutPage from './routes/loggedOut';
+import React, { useState, useEffect } from 'react';
+
+import { useAuth } from "react-oidc-context";
+import CreateBlogPage from './routes/createBlog';
 
 
 function App() {
+  const auth = useAuth();
+
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('https://dyl3fm9keg.execute-api.us-east-1.amazonaws.com/production/'); // Replace with your API endpoint
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const jsonData = await response.json();
+        setData(jsonData);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (auth.isLoading && loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (auth.error || error) {
+    return <div>Encountering error... {auth.error.message}</div>;
+  }
+
   return (
+    <Router>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <button type="button" onClick={hitApiGateway}>
-          Click Me
-        </button>
-        
-        <a href="https://github.com/gfilippini83/fairway-fish-fusion-framework" target="_blank" rel="noopener noreferrer">
-          Check the code out!
-        </a>
-      </header>
+      <ResponsiveNavBar auth={auth} />
+      <Container sx={{backgroundColor: 'rgba(29, 34, 36, 0.35)', height:"100vh"}} >
+      <Routes>
+        <Route path="/" element={<LandingPage props={data}/>} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/create-blog" element={<CreateBlogPage />} />
+        <Route path="/about-us" element={<AboutUsPage />} />
+        <Route path="/logged-in" element={<LoggedInPage />} />
+        <Route path="/logged-out" element={<LoggedOutPage />} />
+      </Routes>
+      </Container>
     </div>
+    </Router>
   );
 }
 
-async function hitApiGateway() {
-  fetch('https://dyl3fm9keg.execute-api.us-east-1.amazonaws.com/production/', {
-    method: "GET"
-  }).then(function(response) {
-    return response.json()
-  }).then( function(data) {
-    console.log(data)
-  })
-}
+
+
 
 export default App;
