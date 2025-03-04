@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_lambda_function" "example" {
   function_name = "base-backend-lambda"
   runtime       = "nodejs20.x"
@@ -13,11 +15,19 @@ resource "aws_lambda_function" "example" {
   memory_size = 128
   timeout     = 30
 
+  environment {
+    variables = {
+      PRIVATE_BUCKET_NAME = var.private_s3_bucket_name
+      REGION              = data.aws_region.current.name
+    }
+  }
+
   tags = {
     env = local.env
   }
   depends_on = [aws_iam_role_policy_attachment.lambda_vpc_access]
 }
+
 
 resource "aws_security_group" "lambda_sg" {
   name        = "lambda-security-group"

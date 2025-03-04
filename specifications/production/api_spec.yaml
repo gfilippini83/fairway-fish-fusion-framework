@@ -3,6 +3,29 @@ info:
   title: Backend API ${api_name}
   version: 1.0
 paths:
+  /get_presigned_url:
+    get:
+      summary: Get Lambda response
+      responses:
+        '200':
+          description: Successful response
+      x-amazon-apigateway-integration:
+        credentials: ${apigateway_role_arn}
+        uri: ${lambda_invoke_arn}
+        passthroughBehavior: when_no_match
+        httpMethod: post
+        type: aws_proxy
+        requestParameters: {}
+        requestTemplates:
+          application/json: '{"body": "$input.json(\"$\" )"}'
+      x-amazon-apigateway-cors:
+        allowOrigin: ['*']
+        allowMethods: ['GET', 'POST', 'OPTIONS']
+        allowHeaders: ['Content-Type', 'Authorization']
+      x-amazon-apigateway-method-response:
+        statusCode: "200"
+        responseParameters: {}
+        responseModels: {}
   /:
     get:
       summary: Get Lambda response

@@ -1,8 +1,9 @@
 module "base_backend_lambda" {
-  source              = "../base-backend-lambda"
-  env                 = local.env
-  private_vpc_subnets = module.vpc_configuration.private_vpc_subnets
-  vpc_id              = module.vpc_configuration.vpc_id
+  source                 = "../base-backend-lambda"
+  env                    = local.env
+  private_vpc_subnets    = module.vpc_configuration.private_vpc_subnets
+  vpc_id                 = module.vpc_configuration.vpc_id
+  private_s3_bucket_name = module.blog_s3.private_s3_bucket_name
 }
 
 module "api_gateway" {
@@ -29,6 +30,8 @@ module "website_cognito" {
 }
 
 module "blog_s3" {
-  source = "../s3"
-  env    = local.env
+  source                     = "../s3"
+  env                        = local.env
+  s3_access_lambda_role_name = module.base_backend_lambda.lambda_execution_role_name
+  lambda_execution_role_arn  = module.base_backend_lambda.lambda_execution_role_arn
 }
