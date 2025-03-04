@@ -25,5 +25,10 @@ module "vpc_configuration" {
 
 module "website_cognito" {
   source = "../cognito"
-  env = local.env
+  env    = local.env
+}
+
+module "blog_s3" {
+  source = "../s3"
+  env    = local.env
 }

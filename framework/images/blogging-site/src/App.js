@@ -12,6 +12,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useAuth } from "react-oidc-context";
 import CreateBlogPage from './routes/createBlog';
+import ProtectedRoute from './auth/protectedRoute';
 
 
 function App() {
@@ -51,11 +52,11 @@ function App() {
     <Router>
     <div className="App">
       <ResponsiveNavBar auth={auth} />
-      <Container sx={{backgroundColor: 'rgba(29, 34, 36, 0.35)', height:"100vh"}} >
+      <Container sx={{backgroundColor: 'rgba(29, 34, 36, 0.5)', position: "-webkit-sticky"}} >
       <Routes>
         <Route path="/" element={<LandingPage props={data}/>} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/create-blog" element={<CreateBlogPage />} />
+        <Route path="/create-blog" element={<ProtectedRoute element={<CreateBlogPage />} />} />
         <Route path="/about-us" element={<AboutUsPage />} />
         <Route path="/logged-in" element={<LoggedInPage />} />
         <Route path="/logged-out" element={<LoggedOutPage />} />

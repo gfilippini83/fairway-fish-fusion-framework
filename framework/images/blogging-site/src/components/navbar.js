@@ -11,9 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+// import AdbIcon from '@mui/icons-material/Adb';
+// import { Icon } from "@material-ui/core";
 import { useNavigate } from 'react-router-dom';
-
+import { Icon } from '@mui/material';
 
 const routes = {
   "About Us" : "/about-us",
@@ -59,6 +60,7 @@ function ResponsiveNavBar({auth}) {
 
   
   const signOutRedirect = () => {
+    localStorage.removeItem('user')
     const clientId = "7ut8bpppnbdsu3f25uokq3gd39";
     const logoutUri = `${process.env.REACT_APP_BASE_URL}/logged-out`;
     const cognitoDomain = "https://fairway-fish-fusion-domain.auth.us-east-1.amazoncognito.com";
@@ -79,7 +81,9 @@ function ResponsiveNavBar({auth}) {
   let isLoggedIn = auth.isAuthenticated
   let username;
   let groups;
+
   if (isLoggedIn) {
+    localStorage.setItem('user', JSON.stringify(auth.user));
     username = auth.user.profile["cognito:username"].toUpperCase()
     groups = auth.user.profile["cognito:groups"]
   } else {
@@ -115,10 +119,12 @@ function ResponsiveNavBar({auth}) {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{bgcolor: "rgba(150, 150, 150, 0.7)"}}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon onClick={() => { navigate("/")} } sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+        <Toolbar disableGutters> 
+          <Icon onClick={() => { navigate("/")} } sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
+              <img src={process.env.PUBLIC_URL + "/icon.ico"} alt="Logo" height={25} width={25}/>
+          </Icon>
           <Typography
             variant="h6"
             noWrap
@@ -131,7 +137,7 @@ function ResponsiveNavBar({auth}) {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'black',
               textDecoration: 'none',
             }}
           >
@@ -172,7 +178,9 @@ function ResponsiveNavBar({auth}) {
               ))}
             </Menu>
           </Box>
-          <AdbIcon onClick={() => { navigate("/")} } sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Icon onClick={() => { navigate("/")} } sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
+              <img src={process.env.PUBLIC_URL + "/icon.ico"} alt="Logo" height={25} width={25}/>
+          </Icon>
           <Typography
             variant="h5"
             noWrap
@@ -186,7 +194,7 @@ function ResponsiveNavBar({auth}) {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'black',
               textDecoration: 'none',
             }}
           >
@@ -197,7 +205,7 @@ function ResponsiveNavBar({auth}) {
               <Button
                 key={page.name}
                 onClick={navigateToPage}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'black', fontWeight: 'bold', display: 'block' }}
               >
                 {page.name}
               </Button>
@@ -205,13 +213,13 @@ function ResponsiveNavBar({auth}) {
             { groups.includes("blogger") &&  
               <Button
               onClick={navigateToPage}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, color: 'black', fontWeight: 'bold', display: 'block' }}
             >
               Create Blog
             </Button>
             }
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {isLoggedIn && <Avatar alt={username} src="/static/images/avatar/2.jpg" />}
@@ -219,8 +227,8 @@ function ResponsiveNavBar({auth}) {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
+              sx={{ mt: '45px'}}
+              id="basic-menu"
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: 'top',
@@ -238,7 +246,7 @@ function ResponsiveNavBar({auth}) {
                 setting.name === "Logout" ?
                 <MenuItem key={setting.name} href={setting.meta.url} onClick={handleCloseUserMenu}>
                   <Typography sx={{ textAlign: 'center' }} href={setting.meta.url}>
-                  <Button onClick={() =>  { auth.removeUser(); signOutRedirect() }}>
+                  <Button onClick={() =>  { auth.removeUser(); signOutRedirect()}}>
                   {setting.name}
                   </Button>
                   </Typography>

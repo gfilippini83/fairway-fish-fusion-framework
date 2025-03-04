@@ -20,15 +20,15 @@ resource "aws_cognito_user_pool" "user_pool" {
 }
 
 resource "aws_cognito_user_pool_client" "user_pool_client" {
-  name                             = "blogging-site-client"
-  user_pool_id                     = aws_cognito_user_pool.user_pool.id
-  generate_secret                  = false # For web clients, this is usually false
+  name                                 = "blogging-site-client"
+  user_pool_id                         = aws_cognito_user_pool.user_pool.id
+  generate_secret                      = false # For web clients, this is usually false
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_flows                = ["code", "implicit"] # or "authorization_code"
-  allowed_oauth_scopes               = ["phone", "email", "openid", "profile", "aws.cognito.signin.user.admin"]
-  callback_urls                      = ["https://www.${var.env}.fishfairwayfusion.com/callback", "http://localhost:3000/logged-in"] # Replace with your callback URL
-  logout_urls                        = ["https://www.${var.env}.fishfairwayfusion.com/logout", "http://localhost:3000/logged-out"] # Replace with your logout URL
-  supported_identity_providers       = ["COGNITO"] # Or other providers like Google, Facebook, etc.
+  allowed_oauth_flows                  = ["code", "implicit"] # or "authorization_code"
+  allowed_oauth_scopes                 = ["phone", "email", "openid", "profile", "aws.cognito.signin.user.admin"]
+  callback_urls                        = ["https://${var.env}.fishfairwayfusion.com/logged-in", "http://localhost:3000/logged-in"]   # Replace with your callback URL
+  logout_urls                          = ["https://${var.env}.fishfairwayfusion.com/logged-out", "http://localhost:3000/logged-out"] # Replace with your logout URL
+  supported_identity_providers         = ["COGNITO"]                                                                                 # Or other providers like Google, Facebook, etc.
 }
 
 resource "aws_cognito_user_pool_domain" "cognito_domain" {

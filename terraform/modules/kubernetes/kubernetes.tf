@@ -24,7 +24,7 @@ resource "aws_eks_node_group" "eks_nodes" {
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "my-eks-node-group"
   subnet_ids      = var.public_vpc_subnets
-  instance_types  = ["t3.micro"]                        # Or your preferred instance types
+  instance_types  = ["t3.medium"]                       # Or your preferred instance types
   version         = aws_eks_cluster.eks_cluster.version # Important: Match the cluster version
 
   scaling_config {

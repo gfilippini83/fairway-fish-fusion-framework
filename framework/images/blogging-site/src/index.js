@@ -11,6 +11,9 @@ const cognitoAuthConfig = {
   redirect_uri: `${process.env.REACT_APP_BASE_URL}/logged-in`,
   response_type: "code",
   scope: "aws.cognito.signin.user.admin email openid phone profile",
+  // automaticSilentRenew: true,
+  // silent_redirect_uri: `${process.env.REACT_APP_BASE_URL}/silent_renew.html`,
+  // loadUserInfo: true,
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
