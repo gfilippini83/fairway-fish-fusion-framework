@@ -11,7 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-MenuItem {
-  bgcolor: "rgba(150, 150, 150, 0.5)"
-}
