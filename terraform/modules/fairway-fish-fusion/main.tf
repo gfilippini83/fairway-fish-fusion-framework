@@ -22,3 +22,13 @@ module "kubernetes" {
 module "vpc_configuration" {
   source = "../vpc"
 }
+
+module "website_cognito" {
+  source = "../cognito"
+  env    = local.env
+}
+
+module "blog_s3" {
+  source = "../s3"
+  env    = local.env
+}

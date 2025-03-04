@@ -30,6 +30,16 @@ resource "kubernetes_deployment" "react_frontend" {
           port {
             container_port = 80
           }
+          resources {
+            requests = {
+              cpu    = "250m"
+              memory = "512Mi"
+            }
+            limits = {
+              cpu    = "500m"
+              memory = "1Gi"
+            }
+          }
         }
       }
     }
