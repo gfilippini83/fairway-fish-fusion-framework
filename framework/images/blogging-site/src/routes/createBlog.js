@@ -8,6 +8,7 @@ function CreateBlogPage({auth}) {
     const [componentsData, setComponentsData] = React.useState([]);
     const [componentCounter, setComponentCounter] = React.useState(1);
     const componentRefs = React.useRef([]); // Create an array of refs
+    // const [currentFile, setCurrentFile] = React.useState(null);
 
 
   const handleAddComponent = () => {
@@ -22,9 +23,9 @@ function CreateBlogPage({auth}) {
       setComponentsData((prevData) =>
           prevData.map((data) => (data.id === id ? { ...data, formData } : data))
       );
-      console.log(componentsData)
   };
 
+  // All point at the function: handleFormData
   const handleSendAllFormData = () => {
     componentRefs.current.forEach((ref) => {
         if (ref && ref.handleSendFormData) {
@@ -36,7 +37,8 @@ function CreateBlogPage({auth}) {
     setComponentsData((prevData) => prevData.filter((data) => data.id !== id));
   };
 
-  const printFormData = () => {
+
+  const postBlog = async () => {
     console.log(componentsData)
   }
 
@@ -44,7 +46,7 @@ function CreateBlogPage({auth}) {
     return (
       <div>
           <Typography variant='h3'>
-          Blog Builder
+          Blog Builder 
           </Typography>
           {componentsData.map((data, index) => (
                 <BlogSectionComponent
@@ -61,7 +63,7 @@ function CreateBlogPage({auth}) {
             <Button sx={{ width: "40%" }} variant="contained" onClick={handleAddComponent}>
               Add Another Section
             </Button>
-            <Button sx={{ width: "40%" }} variant="contained" onClick={printFormData}>
+            <Button sx={{ width: "40%" }} variant="contained" onClick={postBlog}>
               Print Data
             </Button>
             <Button variant="contained" onClick={handleSendAllFormData}>

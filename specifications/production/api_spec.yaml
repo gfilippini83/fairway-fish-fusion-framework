@@ -9,6 +9,11 @@ paths:
       responses:
         '200':
           description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+        content: {}
       x-amazon-apigateway-integration:
         credentials: ${apigateway_role_arn}
         uri: ${lambda_invoke_arn}
@@ -26,12 +31,42 @@ paths:
         statusCode: "200"
         responseParameters: {}
         responseModels: {}
+      security:
+        - Authorizer: []
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content: {}
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   /:
     get:
       summary: Get Lambda response
       responses:
         '200':
           description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content: {}
       x-amazon-apigateway-integration:
         credentials: ${apigateway_role_arn}
         uri: ${lambda_invoke_arn}
@@ -49,3 +84,39 @@ paths:
         statusCode: "200"
         responseParameters: {}
         responseModels: {}
+      security:
+        - Authorizer: []
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content: {}
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+components:
+  securitySchemes:
+    Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - arn:aws:cognito-idp:${region}:${account_id}:userpool/${user_pool_id}

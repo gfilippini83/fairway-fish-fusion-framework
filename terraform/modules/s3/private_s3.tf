@@ -7,6 +7,21 @@ resource "aws_s3_bucket" "private_fff_blog_bucket" {
   }
 }
 
+resource "aws_s3_bucket_cors_configuration" "bucket_cors" {
+  bucket = aws_s3_bucket.private_fff_blog_bucket.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT"]
+    allowed_origins = ["https://production.fishfairwayfusion.com"]
+  }
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT"]
+    allowed_origins = ["http://localhost:3000"]
+  }
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
   bucket = aws_s3_bucket.private_fff_blog_bucket.id
 

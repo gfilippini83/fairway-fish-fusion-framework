@@ -17,3 +17,8 @@ variable "base_backend_lambda_arn" {
   type        = string
   description = "ARN of the lambda that we are invoking"
 }
+
+variable "user_pool_id" {
+  type        = string
+  description = "User Pool ID to authorize for the API"
+}

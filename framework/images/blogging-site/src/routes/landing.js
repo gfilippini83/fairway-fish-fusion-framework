@@ -14,7 +14,7 @@ function srcset(image, size, rows = 1, cols = 1) {
   };
 }
 
-function LandingPage({ props }) {
+function LandingPage() {
     const itemData = [
       {
         img: 'https://blog-fff-image-hosting-bucket.s3.us-east-1.amazonaws.com/Screenshot+2025-02-26+233025.png',
@@ -35,10 +35,6 @@ function LandingPage({ props }) {
         cols: 2,
       }
     ];
-
-    if (!props) {
-      return <div>Loading Data Still.</div>;
-    }
 
     return (
       <div>
@@ -80,8 +76,9 @@ function LandingPage({ props }) {
           What has been accomplished to this point?
           </Typography>
           
-          <Typography variant='p'>
+          <Typography variant='body1'>
           As of now, all the code can be seen in my GitHub <a href="https://github.com/gfilippini83/fairway-fish-fusion-framework" target="_blank" rel="noopener noreferrer"> repository here</a>. In order to not sound redundant, I want to say once that everything listed below is fully managed in Terraform.
+          </Typography>
           <List sx={{justifyContent: "center", display: "grid"}}>
             {/* <ListItem>
               <ListItemText primary={`Fully Dryed Out IaC - Rather than having a main.tf file that for each of the different environment/zone, we have a single tfvars file. We then head to the main directory of the application and can easily swap out which environment/zone we are deploying and pass in the correct vars. The main Terraform directory then calls a number of modules that in essence, is what we can leverage to duplicate the website. `} />
@@ -117,14 +114,13 @@ function LandingPage({ props }) {
               <ListItemText primary={`Custom Domain - One last small callout is how I connected this LoadBalancer to my custom domain, and not only that have it running with SSL and under a subdomain. My only stage currently deployed is production, but it would be incredibly easy to deploy the staging website prepended staging.fairwayfishfusion.com.`} />
             </ListItem>
           </List>
-          </Typography>
           <Typography variant='h4' sx={{ p: 2 }}>
               What's Next?
           </Typography>
 
-          <Typography variant='p'>
+          <Typography variant='body1'>
             I started this project on Monday, February 24th and have gotten it to this point by the 28th of February. The majority of this time was spent perfecting the Terraform modules and infrastructure. Since I work in a continuous deployment fashion, I wanted to get this note out here so there was information about the work that the site is undergoing. Things to look out for in the future:
-            
+          </Typography>
           <List sx={{justifyContent: "center", display: "grid"}}>
             <ListItem>
               <ListItemText primary={`Integrate Atlantis in GitHub`} /> <a href='https://www.runatlantis.io/' target="_blank" rel="noopener noreferrer">(Atlantis)</a>
@@ -148,7 +144,6 @@ function LandingPage({ props }) {
               <ListItemText primary={`Improve Architectural Design Work to Include New Flows`} />
             </ListItem>
           </List>
-          </Typography>
 
           <Typography variant='h4' textAlign={"center"} sx={{ p: 2 }}>
               Stay In Touch!
@@ -157,7 +152,6 @@ function LandingPage({ props }) {
           <Typography variant='body1' textAlign={"center"}>
             My Links:
           </Typography>
-          <Typography variant='body1' textAlign={"center"}>
           <List sx={{justifyContent: "center", display: "grid"}}>
             <ListItem>
               <ListItemText/><a href='https://www.linkedin.com/in/garrett-filippini-a27b90209/' target="_blank" rel="noopener noreferrer">(LinkedIn)</a>
@@ -172,7 +166,6 @@ function LandingPage({ props }) {
               <ListItemText/><a href='https://github.com/gfilippini83' target="_blank" rel="noopener noreferrer">(GitHub)</a>
             </ListItem>
           </List>
-          </Typography>
         </Box>
         
         <Container sx={{p:1}}>

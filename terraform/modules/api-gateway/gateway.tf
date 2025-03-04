@@ -8,7 +8,10 @@ resource "aws_api_gateway_rest_api" "backend_api" {
   body = templatefile("${path.module}/../../../specifications/${var.env}/api_spec.yaml", {
     api_name            = var.api_name,
     lambda_invoke_arn   = var.base_backend_lambda_invoke_arn,
-    apigateway_role_arn = aws_iam_role.apigateway_role.arn
+    apigateway_role_arn = aws_iam_role.apigateway_role.arn,
+    region              = data.aws_region.current.name,
+    account_id          = data.aws_caller_identity.current.account_id,
+    user_pool_id        = var.user_pool_id,
   })
 }
 
@@ -19,7 +22,10 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     redeployment = sha1(templatefile("${path.module}/../../../specifications/${var.env}/api_spec.yaml", {
       api_name            = var.api_name,
       lambda_invoke_arn   = var.base_backend_lambda_invoke_arn,
-      apigateway_role_arn = aws_iam_role.apigateway_role.arn
+      apigateway_role_arn = aws_iam_role.apigateway_role.arn,
+      region              = data.aws_region.current.name,
+      account_id          = data.aws_caller_identity.current.account_id,
+      user_pool_id        = var.user_pool_id,
     }))
   }
   lifecycle {

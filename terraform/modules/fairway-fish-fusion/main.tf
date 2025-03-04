@@ -12,6 +12,7 @@ module "api_gateway" {
   api_name                       = local.api_name
   base_backend_lambda_invoke_arn = module.base_backend_lambda.lambda_invoke_arn
   base_backend_lambda_arn        = module.base_backend_lambda.lambda_arn
+  user_pool_id                   = module.website_cognito.user_pool_id
 }
 
 module "kubernetes" {
