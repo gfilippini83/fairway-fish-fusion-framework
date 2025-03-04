@@ -3,7 +3,7 @@ import React from 'react';
 
 function AboutUsPage() {
     return (
-          <Typography variant='h2'>
+          <Typography variant='h3'>
           About Us Page
           </Typography>
     );

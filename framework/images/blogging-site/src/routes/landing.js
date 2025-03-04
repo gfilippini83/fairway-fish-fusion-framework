@@ -150,13 +150,14 @@ function LandingPage({ props }) {
           </List>
           </Typography>
 
-          <Typography variant='h4' sx={{ p: 2 }}>
+          <Typography variant='h4' textAlign={"center"} sx={{ p: 2 }}>
               Stay In Touch!
           </Typography>
           
-          <Typography variant='p'>
+          <Typography variant='body1' textAlign={"center"}>
             My Links:
-            
+          </Typography>
+          <Typography variant='body1' textAlign={"center"}>
           <List sx={{justifyContent: "center", display: "grid"}}>
             <ListItem>
               <ListItemText/><a href='https://www.linkedin.com/in/garrett-filippini-a27b90209/' target="_blank" rel="noopener noreferrer">(LinkedIn)</a>

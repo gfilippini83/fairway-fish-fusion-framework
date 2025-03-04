@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 // import { Icon } from "@material-ui/core";
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@mui/material';
+import { getRolesContains } from '../auth/authHelpers';
 
 const routes = {
   "About Us" : "/about-us",
@@ -79,16 +80,13 @@ function ResponsiveNavBar({auth}) {
   ]
   //Will do some check here in the future, cookies etc.
   let isLoggedIn = auth.isAuthenticated
-  let username;
-  let groups;
+  let username = "";
+  let groups = [];
 
   if (isLoggedIn) {
     localStorage.setItem('user', JSON.stringify(auth.user));
     username = auth.user.profile["cognito:username"].toUpperCase()
     groups = auth.user.profile["cognito:groups"]
-  } else {
-    username = ""
-    groups = []
   }
   const settings = isLoggedIn ? loggedInSettings : loggedOutSettings;
 
@@ -210,7 +208,7 @@ function ResponsiveNavBar({auth}) {
                 {page.name}
               </Button>
             ))}
-            { groups.includes("blogger") &&  
+            { getRolesContains(["blogger", "admin"], groups) &&  
               <Button
               onClick={navigateToPage}
               sx={{ my: 2, color: 'black', fontWeight: 'bold', display: 'block' }}
