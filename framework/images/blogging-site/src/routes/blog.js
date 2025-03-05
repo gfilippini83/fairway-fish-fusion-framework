@@ -3,7 +3,7 @@ import React from 'react';
 
 function BlogPage() {
     return (
-          <Typography variant='h2'>
+          <Typography variant='h3'>
           Blog Page
           </Typography>
     );

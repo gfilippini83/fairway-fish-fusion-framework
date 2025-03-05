@@ -12,3 +12,8 @@ variable "vpc_id" {
   type        = string
   description = "Main VPC ID"
 }
+
+variable "private_s3_bucket_name" {
+  type        = string
+  description = "Name of the private s3 bucket"
+}

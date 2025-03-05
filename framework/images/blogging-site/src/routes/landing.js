@@ -14,7 +14,7 @@ function srcset(image, size, rows = 1, cols = 1) {
   };
 }
 
-function LandingPage({ props }) {
+function LandingPage() {
     const itemData = [
       {
         img: 'https://blog-fff-image-hosting-bucket.s3.us-east-1.amazonaws.com/Screenshot+2025-02-26+233025.png',
@@ -35,10 +35,6 @@ function LandingPage({ props }) {
         cols: 2,
       }
     ];
-
-    if (!props) {
-      return <div>Loading Data Still.</div>;
-    }
 
     return (
       <div>
@@ -80,51 +76,48 @@ function LandingPage({ props }) {
           What has been accomplished to this point?
           </Typography>
           
-          <Typography variant='p'>
+          <Typography variant='body1'>
           As of now, all the code can be seen in my GitHub <a href="https://github.com/gfilippini83/fairway-fish-fusion-framework" target="_blank" rel="noopener noreferrer"> repository here</a>. In order to not sound redundant, I want to say once that everything listed below is fully managed in Terraform.
+          </Typography>
           <List sx={{justifyContent: "center", display: "grid"}}>
-            {/* <ListItem>
-              <ListItemText primary={`Fully Dryed Out IaC - Rather than having a main.tf file that for each of the different environment/zone, we have a single tfvars file. We then head to the main directory of the application and can easily swap out which environment/zone we are deploying and pass in the correct vars. The main Terraform directory then calls a number of modules that in essence, is what we can leverage to duplicate the website. `} />
-            </ListItem> */}
             <ListItem>
-              <ListItemText primary={`Fully Dryed Out IaC - The Terraform structure I went with for this project is formatted as follows. We have an environment directory that have subdirectories with tfvar files  which store the environemnt/zone specific fields for a website. We then have a module directories that have all the Terraform for each of the AWS resources that this application requires. Currently the modules include: API Gateway, Lambda, Cognito, Kubernetes Cluster/ECR, S3 Bucket, and a VPC configuration.`} />
+              <ListItemText primary={`Fully Dryed Out IaC - The Terraform structure I went with for this project is formatted as follows - we have an environment directory that includes subdirectories with tfvar files  which store the environemnt/zone specific fields for a website. We then have module directories that have all the Terraform for each of the AWS resources that this application requires. The module directory is currently includes the following resources: API Gateway, Lambda, Cognito, Kubernetes Cluster/ECR, S3 Bucket, and a VPC configuration.`} />
             </ListItem>
             <ListItem>
               <ListItemText primary={`API Gateway Ingerated with Lambda - My previous role required me to make constant updates to our API Gateways, updating protobufs, pushing package changes to artifactories that could then be implemented on the lambda's themselves. Currently, we have a very basic lambda that gets a basic event and returns hello world. Can be access publicly currently which allows this URL to invoke that endpoint.`} />
             </ListItem>
             <ListItem>
-              <ListItemText primary={`AWS Lambda - The lambda that is currently deployed is a Nodejs 20 runtime that has boilerplate code to return a hello world message. Being that I focused more on configuring the cloud architecture before implementation, this function has not been fully flushed out yet. The code lives in the framework/lambda/<function> directory and can be build and deployed by following the README.md documentation.`} />
+              <ListItemText primary={`AWS Lambda - The lambda that is currently deployed to the backend, services two endpoints on our now private API Gateway. The base (/), and a new endpoint to get a presigned URL (/get_presigned_url). The base url was used for testing, and now with this second endpoint, our lambda is invoking S3, generating a presigned URL that we then send to the UI to upload images for the blogs to S3.`} />
             </ListItem>
             <ListItem>
-              <ListItemText primary={`AWS Cognito - This allows the site to authenticate the user. Currently there is one group, Blogger, that allows anyone with the blogger role to access the create-blog page. People who sign up as new accounts on the site will not be assigned a role and will not have any blogger/admin level privileges.`} />
+              <ListItemText primary={`AWS Cognito - This allows the site to authenticate the user. Currently there is one group, Blogger, that allows anyone with the blogger role to access the create-blog page. People who sign up as new accounts on the site will not be assigned a role and will not have any blogger/admin level privileges. Using this service, we have now integrated with API Gateway to create an Authorizer which leverages the Congnito User Pool for this service. We now require a valid JWT token to access certain resources, and double check roles when accessing sensitive endpoints.`} />
             </ListItem>
             <ListItem>
               <ListItemText primary={`Kubernetes Cluster/ECR - I have the React JS (Node 20) deployed to two worker pods on a Kubernetes cluster. The code for the images lives in our framework/images/<docker-image> directories. Similary to the lambda function, there is documentation on how to rebuild and deploy the functions to the worker pods in the README.md.`} />
             </ListItem>
             <ListItem>
-              <ListItemText primary={`S3 Buckets - There are a few S3 buckets for this project, one to store lambda deployments, another functions as the backend for our Terraform State for the application, and the last one is a public bucket that allows read access. It is the bucket that is actually hosting the image URLs above.`} />
+              <ListItemText primary={`S3 Buckets - There are a few S3 buckets for this project, one to store lambda deployments, another functions as the backend for our Terraform State for the application, and the last one is a public bucket that allows read access and actually hosts the image URLs above. I do plan on deprecating the public facing S3 in favor of the private one I recently developed. The S3 bucket that we were provisioning the presigned URLs for is the new private one which will store all the images and videos that we plan to display on the site.`} />
             </ListItem>
             <ListItem>
-              <ListItemText primary={`VPC Configuration - This is one resource that I have learned a lot more about through this project. This is where/how you can lock down the internal resources from the external internet. Set up currently there are two private subnets, and two public subnets. The private subnets are routed through our NAT Gateway which allows for API calls out of the internal network and into the internet, but does not allow the internet to access the internal resources. The public subnets are used for the LoadBalancer responsible for hosting the pods with the React code which go through the Internet Gateway (IW).`} />
+              <ListItemText primary={`VPC Configuration - This is one resource that I have learned a lot more about through this project. This is where/how you can lock down the internal resources from the external internet. The set up currently has two private subnets, and two public subnets. The private subnets are routed through our NAT Gateway which allows for API requests out of the internal network and onto the internet, but does not allow the internet to access the internal resources. The public subnets are used for the LoadBalancer responsible for hosting the pods with the React code which go through the Internet Gateway (IW).`} />
             </ListItem>
             <ListItem>
-              <ListItemText primary={`Architectural Design - I have plenty of experience designing software solutions. I typically use LucidChart or Miro. The one image linked above was the initial design for a user with no roles associated with it.`} />
+              <ListItemText primary={`Architectural Design - I have extensive experience designing software solutions. I typically use LucidChart or Miro. The one image linked above was the initial design for a user with no roles associated with it.`} />
             </ListItem>
             <ListItem>
-              <ListItemText primary={`Jira Board - I wanted to show that I have plenty of experience working in an agile framework. Most recently I was working in a Kanban structure but can easily adapt to more of a SCRUM style.`} />
+              <ListItemText primary={`Jira Board - Another area that I have extensive experience working in, is functioning in an agile framework. Most recently I was working in a Kanban structure but can easily adapt to more of a SCRUM style.`} />
             </ListItem>
             <ListItem>
-              <ListItemText primary={`Custom Domain - One last small callout is how I connected this LoadBalancer to my custom domain, and not only that have it running with SSL and under a subdomain. My only stage currently deployed is production, but it would be incredibly easy to deploy the staging website prepended staging.fairwayfishfusion.com.`} />
+              <ListItemText primary={`Custom Domain - One last callout is how I connected this LoadBalancer to my custom domain, and integrated with SSL. Not to mention that this is one subdomain, you can easily create many more subdomains to host different environments for this service (or any service, very easy to do). My only stage currently deployed is production, but it would be incredibly easy to deploy the staging website prepended staging.fairwayfishfusion.com.`} />
             </ListItem>
           </List>
-          </Typography>
           <Typography variant='h4' sx={{ p: 2 }}>
               What's Next?
           </Typography>
 
-          <Typography variant='p'>
-            I started this project on Monday, February 24th and have gotten it to this point by the 28th of February. The majority of this time was spent perfecting the Terraform modules and infrastructure. Since I work in a continuous deployment fashion, I wanted to get this note out here so there was information about the work that the site is undergoing. Things to look out for in the future:
-            
+          <Typography variant='body1'>
+            The majority of this initial phase was spent perfecting the Terraform modules and infrastructure. I have since started working heavily on the frontend React interface as well as updating the lambdas in the backend to better service this frontend. I work in a continuous deployment fashion and I wanted to notify you, the readers, this site is undergoing changes every day! These are some of the things to look out for in the future:
+          </Typography>
           <List sx={{justifyContent: "center", display: "grid"}}>
             <ListItem>
               <ListItemText primary={`Integrate Atlantis in GitHub`} /> <a href='https://www.runatlantis.io/' target="_blank" rel="noopener noreferrer">(Atlantis)</a>
@@ -148,15 +141,14 @@ function LandingPage({ props }) {
               <ListItemText primary={`Improve Architectural Design Work to Include New Flows`} />
             </ListItem>
           </List>
-          </Typography>
 
-          <Typography variant='h4' sx={{ p: 2 }}>
+          <Typography variant='h4' textAlign={"center"} sx={{ p: 2 }}>
               Stay In Touch!
           </Typography>
           
-          <Typography variant='p'>
+          <Typography variant='body1' textAlign={"center"}>
             My Links:
-            
+          </Typography>
           <List sx={{justifyContent: "center", display: "grid"}}>
             <ListItem>
               <ListItemText/><a href='https://www.linkedin.com/in/garrett-filippini-a27b90209/' target="_blank" rel="noopener noreferrer">(LinkedIn)</a>
@@ -171,7 +163,6 @@ function LandingPage({ props }) {
               <ListItemText/><a href='https://github.com/gfilippini83' target="_blank" rel="noopener noreferrer">(GitHub)</a>
             </ListItem>
           </List>
-          </Typography>
         </Box>
         
         <Container sx={{p:1}}>

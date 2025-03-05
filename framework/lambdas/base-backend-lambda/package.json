@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && ../../../scripts/build.sh"
+    "build": "tsc && ../../../scripts/lambda_build.sh"
   },
   "repository": {
     "type": "git",
@@ -19,9 +19,13 @@
   "description": "",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^22.13.9",
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "aws-lambda": "^1.0.7"
+    "@aws-sdk/client-s3": "^3.758.0",
+    "@aws-sdk/s3-request-presigner": "^3.758.0",
+    "aws-lambda": "^1.0.7",
+    "axios": "^1.8.1"
   }
 }

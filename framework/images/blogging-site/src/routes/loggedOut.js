@@ -3,7 +3,7 @@ import React from 'react';
 
 function LoggedOutPage() {
     return (
-          <Typography variant='h2'>
+          <Typography variant='h3'>
           Logged Out Page
           </Typography>
     );
