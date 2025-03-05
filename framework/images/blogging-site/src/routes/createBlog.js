@@ -1,9 +1,9 @@
+
 import { Button, Box, Typography, Grid2 } from '@mui/material';
 import BlogSectionComponent from "../components/blogSection"
 import React from 'react';
 import { getRolesContains } from '../auth/authHelpers';
 import { sendToApi } from '../service/backendService';
-
 function CreateBlogPage({auth}) {
 
     const [componentsData, setComponentsData] = React.useState([]);
