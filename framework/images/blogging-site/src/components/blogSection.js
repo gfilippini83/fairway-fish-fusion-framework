@@ -20,6 +20,7 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [blogText, setBlogText] = React.useState("");
     const [presignedUrl, setPresignedUrl] = React.useState('');
+    const [key, setKey] = React.useState('');
     const fileInputRef = React.useRef(null);
 
     const handleSendFormData = () => {
@@ -29,8 +30,8 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
             subHeaderType,
             sectionSubHeaderText,
             contentType,
-            selectedFile,
-            blogText
+            blogText,
+            key
         };
         onFormData(id, formData);
     };
@@ -69,11 +70,11 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
         setSelectedFile(event.target.files[0]);
         console.log(event.target.files[0].name)
         try {
-            console.log(`User: ${JSON.stringify(localStorage.getItem('user'))}`)
             const ID_TOKEN = JSON.parse(localStorage.getItem('user')).id_token
             console.log(ID_TOKEN)
-            await axios.get(`${process.env.REACT_APP_API_GATEWAY_BASE_URL}/get_presigned_url?key=${uuidv4()}/${event.target.files[0].name}`, { headers: {"Authorization": ID_TOKEN, "Content-Type": "application/json"}}).then( resp => {
-                // console.log(JSON.stringify(resp))
+            const key = `${uuidv4()}/${event.target.files[0].name}`
+            await axios.get(`${process.env.REACT_APP_API_GATEWAY_BASE_URL}/get_presigned_url?key=${key}`, { headers: {"Authorization": ID_TOKEN, "Content-Type": "application/json"}}).then( resp => {
+                setKey(key)
                 setPresignedUrl(resp.data.data.url)
             });
         } catch (error) {
@@ -100,20 +101,6 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
             console.error('Error getting presigned URL:', error);
         }
     }
-
-    // const generatePresignedUrl = async (uuid, fileName) => {
-    //     try {
-    //         const response = await axios.get(`${process.env.REACT_APP_API_GATEWAY_BASE_URL}/get_presigned_url?key=${uuid}/${fileName}`);
-    //         setPresignedUrl(response.data.url)
-    //     } catch (error) {
-    //         console.error('Error getting presigned URL:', error);
-    //     }
-    // }
-
-    // const uploadImage = async () => {
-    //     console.log(presignedUrl)
-    //     await sendFilePresignedUrl(currentFile, presignedUrl)
-    // }
 
     const sectionHeaderDropdown = {
         value: sectionHeaderType,
