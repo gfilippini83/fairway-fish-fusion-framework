@@ -3,7 +3,6 @@ import process from "process";
 import { MissingEnvironmentVariableError, MissingKeyError } from "./errors";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-// import { Axios, AxiosResponse } from "axios";
 
 
 export class PresignerHandler {
@@ -33,24 +32,6 @@ export class PresignerHandler {
         const command = new PutObjectCommand({ Bucket: bucket, Key: key });
         return getSignedUrl(client, command, { expiresIn: 3600 });
     };
-
-    // async put(url: string, data: string): Promise<AxiosResponse<any, any>>{
-        
-    //     const client = new Axios()
-    //     const resp: AxiosResponse = await client.put(url, data, {headers: { "Content-Length": new Blob([data]).size}})
-    //     if(resp.status <= 200 && resp.status >= 299) {
-    //         console.error("There was an error with the PUT request to S3")
-    //         console.error(`Status: ${resp.status}`)
-    //         console.error(`StatusText: ${resp.statusText}`)
-    //         console.error(`Config: ${JSON.stringify(resp.config)}`)
-    //         console.error(`Headers: ${JSON.stringify(resp.headers)}`)
-    //         console.error(`Data: ${JSON.stringify(resp.data)}`)
-    //         throw new S3PutError()
-    //     } else {
-    //         console.log(`Successfully put object in S3 with response: ${JSON.stringify(resp)}`)
-    //         return resp
-    //     }
-    //   };
 
     getBucket() {
         if (process.env.PRIVATE_BUCKET_NAME) {

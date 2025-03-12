@@ -9,16 +9,22 @@ resource "aws_subnet" "eks_subnet_a" {
 
   tags = {
     Name = "eks-subnet-a"
+
+    "kubernetes.io/role/elb" = 1
+    "kubernetes.io/cluster/my-eks-cluster" : "shared"
   }
 }
 
 resource "aws_subnet" "eks_subnet_b" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.2.0/24" # Adjust as needed
-  availability_zone       = data.aws_availability_zones.available.names[3]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.2.0/24" # Adjust as needed
+  availability_zone = data.aws_availability_zones.available.names[3]
+
   map_public_ip_on_launch = true # If you want public IPs on your worker nodes (less common for production)
   tags = {
-    Name = "eks-subnet-b"
+    Name                     = "eks-subnet-b"
+    "kubernetes.io/role/elb" = 1
+    "kubernetes.io/cluster/my-eks-cluster" : "shared"
   }
 }
 

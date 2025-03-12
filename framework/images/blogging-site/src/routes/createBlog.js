@@ -1,14 +1,14 @@
-import { Button, Box, Typography } from '@mui/material';
+
+import { Button, Box, Typography, Grid2 } from '@mui/material';
 import BlogSectionComponent from "../components/blogSection"
 import React from 'react';
 import { getRolesContains } from '../auth/authHelpers';
-
+import { sendToApi } from '../service/backendService';
 function CreateBlogPage({auth}) {
 
     const [componentsData, setComponentsData] = React.useState([]);
     const [componentCounter, setComponentCounter] = React.useState(1);
     const componentRefs = React.useRef([]); // Create an array of refs
-    // const [currentFile, setCurrentFile] = React.useState(null);
 
 
   const handleAddComponent = () => {
@@ -37,8 +37,37 @@ function CreateBlogPage({auth}) {
     setComponentsData((prevData) => prevData.filter((data) => data.id !== id));
   };
 
+  const uploadBlog = async () => {
+    let sections = []
+    componentsData.forEach( form => {
+      const data = form.formData;
+      let object = {
+        contentType: data.contentType
+      }
+      // If its text, no need for image key
+      if(data.contentType === "Text") {
+        object["blogText"] = data.blogText
+      } else {
+        object["key"] = data.key
+      }
 
-  const postBlog = async () => {
+      if (data.sectionHeaderType !== "None") {
+        object["sectionHeaderType"] = data.sectionHeaderType
+        object["sectionHeaderText"] = data.sectionHeaderText
+      }
+
+      if (data.sectionSubHeaderType !== "None") {
+        object["sectionSubHeaderType"] = data.sectionSubHeaderType
+        object["sectionSubHeaderText"] = data.sectionSubHeaderText
+      }
+      
+      sections.push(object)
+    })
+    const ID_TOKEN = JSON.parse(localStorage.getItem('user')).id_token
+    await sendToApi(sections, ID_TOKEN)
+  }
+
+  const printBlog = async () => {
     console.log(componentsData)
   }
 
@@ -60,15 +89,20 @@ function CreateBlogPage({auth}) {
             {/* {components.map((component) => component)} */}
 
           <Box pt={2} pb={2} textAlign='center'>
-            <Button sx={{ width: "40%" }} variant="contained" onClick={handleAddComponent}>
-              Add Another Section
-            </Button>
-            <Button sx={{ width: "40%" }} variant="contained" onClick={postBlog}>
-              Print Data
-            </Button>
-            <Button variant="contained" onClick={handleSendAllFormData}>
-                Send All Form Data
-            </Button>
+            <Grid2 container textAlign="center" spacing={2}>
+              <Button sx={{ width: "40%" }} variant="contained" onClick={handleAddComponent}>
+                Add Another Section
+              </Button>
+              <Button sx={{ width: "40%" }} variant="contained" onClick={printBlog}>
+                Print Data
+              </Button>
+              <Button sx={{ width: "40%" }} variant="contained" onClick={handleSendAllFormData}>
+                  Send All Form Data
+              </Button>
+              <Button sx={{ width: "40%" }} variant="contained" onClick={uploadBlog}>
+                  Upload Blog
+              </Button>
+            </Grid2>
           </Box>
       </div>
     );
