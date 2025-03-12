@@ -4,7 +4,7 @@ data "aws_lb" "alb" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = "my-eks-cluster"
+  name = local.cluster_name
 }
 
 data "aws_region" "current" {}

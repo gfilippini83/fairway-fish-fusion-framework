@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "private_fff_blog_bucket" {
-  bucket = "private-fff-blog-bucket"
+  bucket = local.bucket_name
 
   tags = {
-    Name        = "private-fff-blog-bucket"
+    Name        = local.bucket_name
     Environment = var.env
   }
 }
@@ -13,13 +13,23 @@ resource "aws_s3_bucket_cors_configuration" "bucket_cors" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["PUT"]
-    allowed_origins = ["https://production.fairwayfishfusion.com"]
+    allowed_origins = [var.domain_names[0]]
   }
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["PUT"]
-    allowed_origins = ["http://localhost:3000"]
+    allowed_origins = [var.domain_names[1]]
   }
+  # cors_rule {
+  #   allowed_headers = ["*"]
+  #   allowed_methods = ["PUT"]
+  #   allowed_origins = ["https://production.fairwayfishfusion.com"]
+  # }
+  # cors_rule {
+  #   allowed_headers = ["*"]
+  #   allowed_methods = ["PUT"]
+  #   allowed_origins = ["http://localhost:3000"]
+  # }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
