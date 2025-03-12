@@ -2,7 +2,7 @@
 
 # EKS Cluster
 resource "aws_eks_cluster" "eks_cluster" {
-  name     = "my-eks-cluster"
+  name     = local.cluster_name
   version  = "1.31"                            # Or your preferred Kubernetes version
   role_arn = aws_iam_role.eks_cluster_role.arn # IAM role for the cluster
 

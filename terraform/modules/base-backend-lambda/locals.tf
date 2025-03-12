@@ -1,3 +1,4 @@
 locals {
-  env = var.env
+  env           = var.env
+  function_name = "base-backend-lambda"
 }

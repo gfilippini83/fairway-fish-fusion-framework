@@ -1,11 +1,11 @@
 resource "aws_acm_certificate" "wildcard_cert" {
-  domain_name       = "fairwayfishfusion.com"
+  domain_name       = local.domain_url
   validation_method = "DNS"
 
-  subject_alternative_names = ["*.fairwayfishfusion.com"]
+  subject_alternative_names = ["*.${local.domain_url}"]
 
   tags = {
-    Name = "wildcard-cert-fairwayfishfusion"
+    Name = "wildcard-cert-${var.domain_name}"
   }
 
   lifecycle {

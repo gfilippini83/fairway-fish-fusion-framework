@@ -5,8 +5,9 @@ resource "aws_route53_zone" "primary" {
 
 resource "aws_route53_record" "production_record" {
   zone_id = aws_route53_zone.primary.zone_id # Zone ID of fairwayfishfusion.com
-  name    = "production.fairwayfishfusion.com"
-  type    = "A"
+  # name    = "production.fairwayfishfusion.com"
+  name = local.record_name
+  type = "A"
 
   alias {
     # name                   = aws_lb.alb.dns_name # Will be populated by the ALB

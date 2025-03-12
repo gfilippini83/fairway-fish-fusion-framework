@@ -67,13 +67,13 @@ resource "aws_iam_role" "aws_load_balancer_controller" {
       {
         Effect = "Allow",
         Principal = {
-          "Federated" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/oidc.eks.${data.aws_region.current.name}.amazonaws.com/id/4ED61939AFD9CAEAA7FA07C37EC6BF93"
+          "Federated" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/oidc.eks.${data.aws_region.current.name}.amazonaws.com/id/${split("/", data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer)[4]}"
         },
         Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {
           StringEquals = {
-            "oidc.eks.us-east-1.amazonaws.com/id/4ED61939AFD9CAEAA7FA07C37EC6BF93:aud" = "sts.amazonaws.com",
-            "oidc.eks.us-east-1.amazonaws.com/id/4ED61939AFD9CAEAA7FA07C37EC6BF93:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+            "${split("//", data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer)[1]}:aud" = "sts.amazonaws.com",
+            "${split("//", data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer)[1]}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
           }
         }
       }

@@ -8,20 +8,20 @@ resource "kubernetes_namespace" "fairway_fish_fusion" {
 resource "kubernetes_deployment" "react_frontend" {
   depends_on = [aws_eks_node_group.eks_nodes]
   metadata {
-    name      = "react-frontend-deployment"
+    name      = "${local.app}-deployment"
     namespace = kubernetes_namespace.fairway_fish_fusion.metadata[0].name
   }
   spec {
     replicas = 2 # Number of replicas
     selector {
       match_labels = {
-        app = "react-frontend"
+        app = local.app
       }
     }
     template {
       metadata {
         labels = {
-          app = "react-frontend"
+          app = local.app
         }
       }
       spec {
@@ -50,12 +50,12 @@ resource "kubernetes_deployment" "react_frontend" {
 # # Kubernetes Service to expose the React frontend
 resource "kubernetes_service_v1" "react_frontend_service" {
   metadata {
-    name      = "react-frontend-service"
+    name      = "${local.app}-service"
     namespace = kubernetes_namespace.fairway_fish_fusion.metadata[0].name
   }
   spec {
     selector = {
-      app = "react-frontend"
+      app = local.app
     }
     port {
       port        = 80
