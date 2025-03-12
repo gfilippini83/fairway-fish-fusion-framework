@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { PresignerHandler } from './presigner';
+import { UploadBlogError } from './errors';
 
 
 const presignerHandler = new PresignerHandler()
@@ -13,6 +14,17 @@ export const handler = async (
         return wrap({
             data: {
                 url: resp
+            }
+        })
+    } else if(event.path.includes("upload_blog") && event.httpMethod.toUpperCase() === "POST") {
+        if(!event.body) {
+            throw new UploadBlogError(`No body included in POST request.`)
+        }
+        const body = JSON.parse(event.body)
+        console.log(body)
+        return wrap({
+            data: {
+                body: event.body
             }
         })
     } else {

@@ -13,7 +13,7 @@ resource "aws_s3_bucket_cors_configuration" "bucket_cors" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["PUT"]
-    allowed_origins = ["https://production.fishfairwayfusion.com"]
+    allowed_origins = ["https://production.fairwayfishfusion.com"]
   }
   cors_rule {
     allowed_headers = ["*"]

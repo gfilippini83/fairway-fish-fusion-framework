@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios'
 
-const textVariants = ["h1", "h2", "h3", "h4", "h5", "h6", "subtitle1", "subtitle2", "body1", "body2", "caption", "overline"]
+const textVariants = ["None", "h1", "h2", "h3", "h4", "h5", "h6", "subtitle1", "subtitle2", "body1", "body2", "caption", "overline"]
 
 
 const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => {
@@ -16,7 +16,7 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
     const [sectionHeaderType, setSectionHeader] = React.useState('');
     const [sectionHeaderText, setSectionHeaderText] = React.useState('');
     const [sectionSubHeaderText, setSubHeaderText] = React.useState('');
-    const [subHeaderType, setSubHeader] = React.useState('');
+    const [sectionSubHeaderType, setSubHeader] = React.useState('');
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [blogText, setBlogText] = React.useState("");
     const [presignedUrl, setPresignedUrl] = React.useState('');
@@ -27,7 +27,7 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
         const formData = {
             sectionHeaderType,
             sectionHeaderText,
-            subHeaderType,
+            sectionSubHeaderType,
             sectionSubHeaderText,
             contentType,
             blogText,
@@ -71,7 +71,6 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
         console.log(event.target.files[0].name)
         try {
             const ID_TOKEN = JSON.parse(localStorage.getItem('user')).id_token
-            console.log(ID_TOKEN)
             const key = `${uuidv4()}/${event.target.files[0].name}`
             await axios.get(`${process.env.REACT_APP_API_GATEWAY_BASE_URL}/get_presigned_url?key=${key}`, { headers: {"Authorization": ID_TOKEN, "Content-Type": "application/json"}}).then( resp => {
                 setKey(key)
@@ -93,7 +92,6 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
     
   
     const sendFilePresignedUrl = async () => {
-        console.log(presignedUrl)
         try {
             const response = await axios.put(presignedUrl, selectedFile, {headers : { "Content-Type" : selectedFile.type}})
             console.log(response)
@@ -110,9 +108,9 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
     }
 
     const subHeaderDropdown = {
-        value: subHeaderType,
+        value: sectionSubHeaderType,
         label: "Sub-Header Type",
-        options: ["None"].concat(textVariants),
+        options: textVariants,
         onChange: handleSubHeader
     }
 
@@ -139,13 +137,21 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
                     <Grid size={4}> 
                         <DropdownForm dropdownInputs={sectionHeaderDropdown}/>
                     </Grid>
-                    <Grid size={8}> 
+                    {/* <Grid size={8}> 
                         <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Insert Section Title Here" onChange={handleSectionHeaderText}/> 
+                    </Grid> */}
+                    { sectionHeaderType !== "None" ?
+                    <Grid size={8}> 
+                        <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Insert Sub-header Here" onChange={handleSectionHeaderText}/> 
+                    </Grid> :
+                    <Grid size={8}> 
+                        <div></div> 
                     </Grid>
+                    }
                     <Grid size={4}> 
                         <DropdownForm dropdownInputs={subHeaderDropdown}/>
                     </Grid>
-                    { subHeaderType !== "None" ?
+                    { sectionSubHeaderType !== "None" ?
                     <Grid size={8}> 
                         <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Insert Sub-header Here" onChange={handleSubHeaderText}/> 
                     </Grid> :

@@ -36,3 +36,8 @@ module "blog_s3" {
   s3_access_lambda_role_name = module.base_backend_lambda.lambda_execution_role_name
   lambda_execution_role_arn  = module.base_backend_lambda.lambda_execution_role_arn
 }
+module "route_53" {
+  source       = "../route53"
+  alb_dns_name = module.kubernetes.alb_dns_name
+  alb_zone_id  = module.kubernetes.alb_zone_id
+}

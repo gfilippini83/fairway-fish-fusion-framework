@@ -21,3 +21,11 @@ export class S3PutError extends Error {
         this.message = `There was an error when attempting to put the object in s3`
     }
 }
+
+export class UploadBlogError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = "UploadBlogError"
+        this.message = `There was an error when attempting to upload the blog: ${message}`
+    }
+}

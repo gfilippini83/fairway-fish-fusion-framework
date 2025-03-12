@@ -55,3 +55,38 @@ resource "aws_iam_role_policy_attachment" "eks_ecr_policy" {                # If
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly" # Or a more specific policy
   role       = aws_iam_role.eks_node_role.name
 }
+
+
+## Helm Role
+
+resource "aws_iam_role" "aws_load_balancer_controller" {
+  name = "aws-load-balancer-controller"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          "Federated" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/oidc.eks.${data.aws_region.current.name}.amazonaws.com/id/4ED61939AFD9CAEAA7FA07C37EC6BF93"
+        },
+        Action = "sts:AssumeRoleWithWebIdentity",
+        Condition = {
+          StringEquals = {
+            "oidc.eks.us-east-1.amazonaws.com/id/4ED61939AFD9CAEAA7FA07C37EC6BF93:aud" = "sts.amazonaws.com",
+            "oidc.eks.us-east-1.amazonaws.com/id/4ED61939AFD9CAEAA7FA07C37EC6BF93:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "aws_load_balancer_controller" {
+  name        = "AWSLoadBalancerControllerIAMPolicy"
+  description = "Policy for AWS Load Balancer Controller"
+  policy      = file("${path.module}/aws-load-balancer-controller-policy.json") # see below
+}
+resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller" {
+  role       = aws_iam_role.aws_load_balancer_controller.name
+  policy_arn = aws_iam_policy.aws_load_balancer_controller.arn
+}

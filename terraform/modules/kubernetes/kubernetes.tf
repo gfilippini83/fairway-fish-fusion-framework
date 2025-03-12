@@ -3,7 +3,7 @@
 # EKS Cluster
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "my-eks-cluster"
-  version  = "1.27"                            # Or your preferred Kubernetes version
+  version  = "1.31"                            # Or your preferred Kubernetes version
   role_arn = aws_iam_role.eks_cluster_role.arn # IAM role for the cluster
 
   vpc_config {
@@ -28,8 +28,8 @@ resource "aws_eks_node_group" "eks_nodes" {
   version         = aws_eks_cluster.eks_cluster.version # Important: Match the cluster version
 
   scaling_config {
-    desired_size = 2
-    max_size     = 5
+    desired_size = 3
+    max_size     = 6
     min_size     = 1
   }
   # IAM Role for the worker nodes

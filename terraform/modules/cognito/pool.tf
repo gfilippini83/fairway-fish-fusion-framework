@@ -26,8 +26,8 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code", "implicit"] # or "authorization_code"
   allowed_oauth_scopes                 = ["phone", "email", "openid", "profile", "aws.cognito.signin.user.admin"]
-  callback_urls                        = ["https://${var.env}.fishfairwayfusion.com/logged-in", "http://localhost:3000/logged-in", "https://production.fishfairwayfusion.com/silent_renew.html", "http://localhost:3000/silent_renew.html"] # Replace with your callback URL
-  logout_urls                          = ["https://${var.env}.fishfairwayfusion.com/logged-out", "http://localhost:3000/logged-out"]                                                                                                        # Replace with your logout URL
+  callback_urls                        = ["https://${var.env}.fairwayfishfusion.com/logged-in", "http://localhost:3000/logged-in", "https://production.fairwayfishfusion.com/silent_renew.html", "http://localhost:3000/silent_renew.html"] # Replace with your callback URL
+  logout_urls                          = ["https://${var.env}.fairwayfishfusion.com/logged-out", "http://localhost:3000/logged-out"]                                                                                                        # Replace with your logout URL
   supported_identity_providers         = ["COGNITO"]                                                                                                                                                                                        # Or other providers like Google, Facebook, etc.
 }
 

@@ -38,18 +38,33 @@ function CreateBlogPage({auth}) {
   };
 
   const uploadBlog = async () => {
-    let clone = structuredClone(componentsData)
-    clone.forEach( form => {
+    let sections = []
+    componentsData.forEach( form => {
       const data = form.formData;
+      let object = {
+        contentType: data.contentType
+      }
       // If its text, no need for image key
       if(data.contentType === "Text") {
-        delete data.key
+        object["blogText"] = data.blogText
       } else {
-        delete data.blogText
+        object["key"] = data.key
       }
+
+      if (data.sectionHeaderType !== "None") {
+        object["sectionHeaderType"] = data.sectionHeaderType
+        object["sectionHeaderText"] = data.sectionHeaderText
+      }
+
+      if (data.sectionSubHeaderType !== "None") {
+        object["sectionSubHeaderType"] = data.sectionSubHeaderType
+        object["sectionSubHeaderText"] = data.sectionSubHeaderText
+      }
+      
+      sections.push(object)
     })
-    console.log(clone)
-    await sendToApi(clone)
+    const ID_TOKEN = JSON.parse(localStorage.getItem('user')).id_token
+    await sendToApi(sections, ID_TOKEN)
   }
 
   const printBlog = async () => {
