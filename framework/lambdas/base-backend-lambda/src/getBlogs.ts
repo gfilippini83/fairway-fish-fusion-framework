@@ -1,5 +1,6 @@
 import { GetObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { Config } from "./environment.js";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const BLOG_PREFIX = "blogs"
 
@@ -31,9 +32,18 @@ export class GetBlogsHandler {
                             Key: key
                         })
                         const data = await this.config.client.send(getInput)
-                        const content =  await data.Body?.transformToString()
+                        let content =  await data.Body?.transformToString()
                         console.log(`Content for Key: ${key}, Content: ${content}`)
-                        enriched_data.push(content)
+                        if(content !== undefined) {
+                            let parsedContent = JSON.parse(content)
+                            for( let section of parsedContent) {
+                                if(section.contentType === "Image/Video") {
+                                    const url = await this.getKeyPresignedUrl(section.key);
+                                    section.key = url
+                                }
+                            }
+                            enriched_data.push(JSON.stringify(parsedContent))
+                        }
                     }
                 }
             }
@@ -46,5 +56,20 @@ export class GetBlogsHandler {
             console.error("Error listing objects:", error);
             throw error;
         }
+    }
+    async getKeyPresignedUrl(key: any) {
+        try {
+            const command = new GetObjectCommand({
+              Bucket: this.config.private_bucket,
+              Key: key,
+            });
+        
+            let preSignedUrl: string = await getSignedUrl(this.config.client, command, { expiresIn: 60 * 10 });
+            return preSignedUrl;
+        
+          } catch (error) {
+            console.error("Error generating pre-signed URL:", error);
+            return null; // Or handle the error appropriately
+          }
     }
 }

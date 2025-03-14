@@ -1,13 +1,11 @@
 import { Box, Container, ImageListItem, Typography } from '@mui/material';
 import React from 'react';
-import { data, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-function srcset(image, size, rows = 1, cols = 1) {
+function srcset(image) {
     return {
-      src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-      srcSet: `${image}?w=${size * cols}&h=${
-        size * rows
-      }&fit=crop&auto=format&dpr=2 2x`,
+      src: `${image}`,
+      srcSet: `${image}`,
     };
   }
 
@@ -34,6 +32,14 @@ function BlogDetails() {
             <Typography variant={"p"} sx={{ p: 5 }}>
                 {blogData[0].blogText}
             </Typography>}
+            {blogData[0].contentType  === "Image/Video" &&
+                <ImageListItem key={blogData[0].key} cols={ 1} rows={ 1}>
+                <img
+                {...srcset(blogData[0].key, 121, 2, 2)}
+                alt={"Holder"}
+                loading="lazy"
+                />
+            </ImageListItem>}
             {blogData.map((data, index) => {
                 if(index !== 0) {
                     return ( 
@@ -48,18 +54,19 @@ function BlogDetails() {
                             <Typography variant={"p"} sx={{ p: 5 }}>
                                 {data.blogText}
                             </Typography>}
-                            {data.contentType  !== "Text" &&
-                                <ImageListItem key={"https://blog-fff-image-hosting-bucket.s3.us-east-1.amazonaws.com/Screenshot+2025-02-26+233025.png"} cols={ 1} rows={ 1}>
+                            {data.contentType  === "Image/Video" &&
+                                <ImageListItem key={data.key} cols={ 1} rows={ 1}>
                                 <img
-                                {...srcset("https://blog-fff-image-hosting-bucket.s3.us-east-1.amazonaws.com/Screenshot+2025-02-26+233025.png", 121, 2, 2)}
+                                {...srcset(data.key, 121, 2, 2)}
                                 alt={"Holder"}
                                 loading="lazy"
                                 // onClick={migrate}
                                 />
-                            </ImageListItem>
-                            }
+                            </ImageListItem>}
                         </div>
                      )
+                } else {
+                    return (<div></div>)
                 }
             })}
         </Box>
