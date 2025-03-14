@@ -13,6 +13,7 @@ import React from 'react';
 import { useAuth } from "react-oidc-context";
 import CreateBlogPage from './routes/createBlog';
 import ProtectedRoute from './auth/protectedRoute';
+import BlogDetails from './routes/blogDetails';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/about-us" element={<AboutUsPage />} />
         <Route path="/logged-in" element={<LoggedInPage />} />
         <Route path="/logged-out" element={<LoggedOutPage />} />
+        <Route path="/blog/:blogId" element={<BlogDetails />} /> {/* Route for blog details */}
       </Routes>
       </Container>
     </div>

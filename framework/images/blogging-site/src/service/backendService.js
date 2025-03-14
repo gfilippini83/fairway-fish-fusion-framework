@@ -5,10 +5,10 @@ export async function sendToApi(array, ID_TOKEN) {
     await axios.post(postUrl, JSON.stringify(array), { headers: {"Authorization": ID_TOKEN, "Content-Type": "application/json"}})
 }
 
-export async function getPaginatedBlogs(ID_TOKEN, cursor=undefined, limit=20) {
+export async function getPaginatedBlogs(cursor=undefined, limit=20) {
     let getUrl = `${process.env.REACT_APP_API_GATEWAY_BASE_URL}/get_blogs?limit=${limit}`
     if (cursor !== undefined) {
         getUrl += getUrl + `&cursor=${cursor}`
     }
-    await axios.get(getUrl,  { headers: {"Authorization": ID_TOKEN, "Content-Type": "application/json"}})
+    return await axios.get(getUrl)
 }

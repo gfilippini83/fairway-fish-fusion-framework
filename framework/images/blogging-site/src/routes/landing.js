@@ -1,5 +1,7 @@
 import { Box, Typography, ImageList, ImageListItem, ListItem, ListItemText, List, Container } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getPaginatedBlogs } from '../service/backendService';
+import BlogList from '../components/blogList';
 
 function migrate(event) {
   window.open(event.target.currentSrc, '_blank')
@@ -15,6 +17,30 @@ function srcset(image, size, rows = 1, cols = 1) {
 }
 
 function LandingPage() {
+  
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+            const response = await getPaginatedBlogs()
+            const paginated_blogs = response.data.objects
+            setData(paginated_blogs);
+            setLoading(false);
+        } catch (e) {
+            setError(e);
+            setLoading(false);
+        }
+      };
+
+      fetchData();
+    }, []);
+  
+    if (error) {
+      return <p>Error: {error.message}</p>;
+    }
     const itemData = [
       {
         img: 'https://blog-fff-image-hosting-bucket.s3.us-east-1.amazonaws.com/Screenshot+2025-02-26+233025.png',
@@ -38,6 +64,7 @@ function LandingPage() {
 
     return (
       <div>
+        
         <Container sx={{p:1}}>
           
         </Container>
@@ -165,6 +192,17 @@ function LandingPage() {
           </List>
         </Box>
         
+        <Container sx={{p:1}}>
+          
+        </Container>
+        { !loading && <Container sx={{ textAlign: 'center', alignItems: 'center' }}>
+            <Typography variant="h3" textAlign={'center'}>
+              Most Recent Blogs!
+            </Typography>
+            <BlogList blogs={data} />
+          </Container>}
+        { loading && 
+        <p>Loading...</p>}
         <Container sx={{p:1}}>
           
         </Container>

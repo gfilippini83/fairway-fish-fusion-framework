@@ -1,25 +1,45 @@
-import { Button, Typography } from '@mui/material';
-import React from 'react';
+import { Container, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { getPaginatedBlogs } from '../service/backendService';
+import BlogList from '../components/blogList';
 
 function BlogPage() {
+      
+      const [data, setData] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
 
-      async function getBlogs() {
-            
-            const ID_TOKEN = JSON.parse(localStorage.getItem('user')).id_token
-            const response = await getPaginatedBlogs(ID_TOKEN)
-      }
+      useEffect(() => {
+            const fetchData = async () => {
+              try {
+                  const response = await getPaginatedBlogs()
+                  const paginated_blogs = response.data.objects
+                  setData(paginated_blogs);
+                  setLoading(false);
+              } catch (e) {
+                  setError(e);
+                  setLoading(false);
+              }
+            };
+        
+            fetchData();
+          }, []);
+        
+          if (loading) {
+            return <p>Loading...</p>;
+          }
+        
+          if (error) {
+            return <p>Error: {error.message}</p>;
+          }
 
       return (
-            <div>
-                  <Typography variant='h3'>
-                        Blog Page
-                  </Typography>
-                  
-                  <Button sx={{ width: "40%" }} variant="contained" onClick={getBlogs}>
-                  Get Blogs
-                  </Button>
-            </div>
+          <Container sx={{ textAlign: 'center', alignItems: 'center' }}>
+            <Typography variant="h3" textAlign={'center'}>
+              Blog Page
+            </Typography>
+            <BlogList blogs={data} />
+          </Container>
             
       );
   }

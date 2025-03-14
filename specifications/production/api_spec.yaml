@@ -163,8 +163,6 @@ paths:
           statusCode: "200"
           responseParameters: {}
           responseModels: {}
-        security:
-          - Authorizer: []
       options:
         responses:
           "200":
