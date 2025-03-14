@@ -129,6 +129,69 @@ paths:
           application/json: "{\"statusCode\": 200}"
         passthroughBehavior: "when_no_match"
         type: "mock"
+  /get_blogs:
+      get:
+        summary: Get Lambda response
+        responses:
+          '200':
+            description: Successful response
+            headers:
+              Access-Control-Allow-Origin:
+                schema:
+                  type: "string"
+              Access-Control-Allow-Methods:
+                schema:
+                  type: "string"
+              Access-Control-Allow-Headers:
+                schema:
+                  type: "string"
+            content: {}
+        x-amazon-apigateway-integration:
+          credentials: ${apigateway_role_arn}
+          uri: ${lambda_invoke_arn}
+          passthroughBehavior: when_no_match
+          httpMethod: post
+          type: aws_proxy
+          requestParameters: {}
+          requestTemplates:
+            application/json: '{"body": "$input.json(\"$\" )"}'
+        x-amazon-apigateway-cors:
+          allowOrigin: ['*']
+          allowMethods: ['*']
+          allowHeaders: ['*']
+        x-amazon-apigateway-method-response:
+          statusCode: "200"
+          responseParameters: {}
+          responseModels: {}
+        security:
+          - Authorizer: []
+      options:
+        responses:
+          "200":
+            description: "200 response"
+            headers:
+              Access-Control-Allow-Origin:
+                schema:
+                  type: "string"
+              Access-Control-Allow-Methods:
+                schema:
+                  type: "string"
+              Access-Control-Allow-Headers:
+                schema:
+                  type: "string"
+            content: {}
+        x-amazon-apigateway-integration:
+          responses:
+            default:
+              statusCode: "200"
+              responseParameters:
+                method.response.header.Access-Control-Allow-Headers: "'*'"
+                method.response.header.Access-Control-Allow-Methods: "'*'"
+                method.response.header.Access-Control-Allow-Origin: "'*'"
+          requestTemplates:
+            application/json: "{\"statusCode\": 200}"
+          passthroughBehavior: "when_no_match"
+          type: "mock"
   /:
     get:
       summary: Get Lambda response

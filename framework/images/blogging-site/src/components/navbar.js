@@ -174,6 +174,13 @@ function ResponsiveNavBar({auth}) {
                   <Typography onClick={navigateToPage} sx={{ textAlign: 'center' }}>{page.name}</Typography>
                 </MenuItem>
               ))}
+              
+              { getRolesContains(["blogger", "admin"], groups) &&  
+                <MenuItem key={"Create Blog"} onClick={handleCloseNavMenu}
+              >
+                <Typography onClick={navigateToPage} sx={{ textAlign: 'center' }}>Create Blog</Typography>
+              </MenuItem>
+              }
             </Menu>
           </Box>
           <Icon onClick={() => { navigate("/")} } sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>

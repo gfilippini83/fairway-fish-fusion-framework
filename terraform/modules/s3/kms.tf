@@ -23,6 +23,15 @@ resource "aws_kms_key" "private_s3_kms" {
         },
         Action   = "kms:GenerateDataKey",
         Resource = "*"
+      },
+      {
+        Sid    = "Allow Lambda Role to Generate Data Keys",
+        Effect = "Allow",
+        Principal = {
+          AWS = var.lambda_execution_role_arn
+        },
+        Action   = "kms:Decrypt",
+        Resource = "*"
       }
     ]
   })
