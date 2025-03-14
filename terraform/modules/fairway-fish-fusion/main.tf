@@ -4,6 +4,8 @@ module "base_backend_lambda" {
   private_vpc_subnets    = module.vpc_configuration.private_vpc_subnets
   vpc_id                 = module.vpc_configuration.vpc_id
   private_s3_bucket_name = module.blog_s3.private_s3_bucket_name
+  cognito_client_id      = module.website_cognito.user_pool_client_id
+  cognito_user_pool_id   = module.website_cognito.user_pool_id 
 }
 
 module "api_gateway" {

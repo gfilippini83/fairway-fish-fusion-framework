@@ -4,18 +4,17 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "./src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "declaration": true,
-    "types": ["mocha", "chai", "node"]
+    "declaration": false,
   },
   "ts-node": {
     "esm": true
   },
-  "include": ["src/**/*.ts", "tests/**/*ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

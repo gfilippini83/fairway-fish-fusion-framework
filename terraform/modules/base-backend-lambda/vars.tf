@@ -3,6 +3,18 @@ variable "env" {
   description = "String value containing the environment for off the service."
 }
 
+variable "cognito_client_id" {
+  type = string
+  description = "String value with the client ID for the cognito pool"
+  
+}
+
+variable "cognito_user_pool_id" {
+  type = string
+  description = "String value with the cognito user pool ID for the cognito pool"
+  
+}
+
 variable "private_vpc_subnets" {
   type        = list(string)
   description = "List of IDs pertaining to our private subnets"

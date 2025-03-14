@@ -17,8 +17,10 @@ resource "aws_lambda_function" "example" {
 
   environment {
     variables = {
-      PRIVATE_BUCKET_NAME = var.private_s3_bucket_name
-      REGION              = data.aws_region.current.name
+      PRIVATE_BUCKET_NAME  = var.private_s3_bucket_name
+      REGION               = data.aws_region.current.name
+      CLIENT_ID            = var.cognito_client_id
+      COGNITO_USER_POOL_ID = var.cognito_user_pool_id
     }
   }
 

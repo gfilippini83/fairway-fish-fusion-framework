@@ -1,10 +1,15 @@
 {
-  "name": "base-backend-lambda",
+  "name": "@repo-lambda/base-backend-lambda",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && ../../../scripts/lambda_build.sh"
+    "test": "mocha tests/**/*.spec.ts",
+    "build": "npm run clean && npm run clean:build && npm run install:production && tsc -p tsconfig.production.json && npm run create-zip",
+    "clean:build": "[ -d './build' ] && rm -r ./build || echo 'No Build' && [ -d './dist' ] && rm -r ./dist || echo 'No Dist'",
+    "clean": "[ -d './node_modules' ] && rm -r ./node_modules || echo 'No Node Modules'",
+    "install:production": "npm i --production",
+    "create-zip": "mkdir build && (cd dist && zip -r ../build/lambda_function.zip .) && zip -r ./build/lambda_function.zip ./node_modules && zip -r ./build/lambda_function.zip ./package.json"
   },
   "repository": {
     "type": "git",
@@ -18,14 +23,27 @@
   "homepage": "https://github.com/gfilippini83/fairway-fish-fusion-infra#readme",
   "description": "",
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.147",
-    "@types/node": "^22.13.9",
-    "typescript": "^5.7.3"
+    "@types/chai": "^5.2.0",
+    "@types/chai-as-promised": "^8.0.2",
+    "@types/mocha": "^10.0.10",
+    "@types/sinon": "^17.0.4",
+    "chai": "^5.2.0",
+    "chai-as-promised": "^8.0.1",
+    "mocha": "^11.1.0",
+    "sinon": "^19.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@aws-sdk/client-s3": "^3.758.0",
     "@aws-sdk/s3-request-presigner": "^3.758.0",
+    "@framework-package/commons": "../../packages/commons/",
+    "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^22.13.10",
+    "aws-jwt-verify": "^5.0.0",
     "aws-lambda": "^1.0.7",
-    "axios": "^1.8.1"
+    "axios": "^1.8.1",
+    "save-dev": "^0.0.1-security"
   }
 }

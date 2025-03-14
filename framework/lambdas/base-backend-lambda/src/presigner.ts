@@ -1,19 +1,12 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import process from "process";
-import { MissingEnvironmentVariableError, MissingKeyError } from "./errors";
+import { MissingEnvironmentVariableError, MissingKeyError } from "./errors.js";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 
 export class PresignerHandler {
 
-    readonly bucket: string;
-    readonly region: string;
-
-    constructor() {
-        this.bucket = this.getBucket()
-        this.region = this.getRegion()
-    }
     async handle( event: APIGatewayProxyEvent ): Promise<string> {
         if(!event.queryStringParameters?.key) {
             throw new MissingKeyError()
@@ -26,8 +19,8 @@ export class PresignerHandler {
     }
 
     async createPresignedUrlWithClient(key: string) {
-        const region = this.region
-        const bucket = this.bucket
+        const region = this.getRegion()
+        const bucket = this.getBucket()
         const client = new S3Client({ region });
         const command = new PutObjectCommand({ Bucket: bucket, Key: key });
         return getSignedUrl(client, command, { expiresIn: 3600 });
