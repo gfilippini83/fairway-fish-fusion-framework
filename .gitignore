@@ -3,6 +3,7 @@
 
 **/node_modules/
 **/build/
+**/dist/
 **/*.zip
 
 **/image_deploy.sh

@@ -29,3 +29,19 @@ export class UploadBlogError extends Error {
         this.message = `There was an error when attempting to upload the blog: ${message}`
     }
 }
+
+export class NoAuthTokenError extends Error {
+    constructor() {
+        super()
+        this.name = "NoAuthTokenError"
+        this.message = "No auth token provided with request."
+    }
+}
+
+export class TokenInvalidError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = "TokenInvalidError"
+        this.message = `Token was provided but it was invalid: ${message}`
+    }
+}
