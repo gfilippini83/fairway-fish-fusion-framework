@@ -43,7 +43,7 @@ function LandingPage() {
     }
     const itemData = [
       {
-        img: 'https://blog-fff-image-hosting-bucket.s3.us-east-1.amazonaws.com/Screenshot+2025-02-26+233025.png',
+        img: 'https://blog-fff-image-hosting-bucket.s3.us-east-1.amazonaws.com/updated-diagram.png',
         title: 'Breakfast',
         rows: 3,
         cols: 4,
@@ -68,12 +68,12 @@ function LandingPage() {
         <Container sx={{p:1}}>
           
         </Container>
-        <Box sx={{bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: '16px', p: 15}}>
-          <Typography variant='h2' sx={{ p: 5 }}>
+        <Box sx={{bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: '16px', p: { xs: 3, sm: 8, md: 15 }}}>
+          <Typography variant='h4' sx={{ p: { xs: 2, sm: 3, md: 5 } }}>
           Welcome to Garrett Filippini's Project, Fairway Fish Fusion!
           </Typography>
 
-          <Typography variant='h4' sx={{ p: 2 }} >
+          <Typography variant='45' sx={{ p: 2 }} >
           Objective
           </Typography>
 
@@ -82,9 +82,9 @@ function LandingPage() {
           </Typography>
 
           <ImageList
-            sx={{ p: 10 }}
+            sx={{ p: { xs: 1, sm: 5, md: 10 } }}
             variant="quilted"
-            cols={4}
+            cols={{ xs: 1, sm: 2, md: 4 }}
             rowHeight={121}
           >
             {itemData.map((item) => (
@@ -99,7 +99,7 @@ function LandingPage() {
             ))}
           </ImageList>
 
-          <Typography variant='h4' sx={{ p: 2 }}>
+          <Typography variant='45' sx={{ p: 2 }}>
           What has been accomplished to this point?
           </Typography>
           
@@ -138,7 +138,7 @@ function LandingPage() {
               <ListItemText primary={`Custom Domain - One last callout is how I connected this LoadBalancer to my custom domain, and integrated with SSL. Not to mention that this is one subdomain, you can easily create many more subdomains to host different environments for this service (or any service, very easy to do). My only stage currently deployed is production, but it would be incredibly easy to deploy the staging website prepended staging.fairwayfishfusion.com.`} />
             </ListItem>
           </List>
-          <Typography variant='h4' sx={{ p: 2 }}>
+          <Typography variant='45' sx={{ p: 2 }}>
               What's Next?
           </Typography>
 
@@ -169,7 +169,7 @@ function LandingPage() {
             </ListItem>
           </List>
 
-          <Typography variant='h4' textAlign={"center"} sx={{ p: 2 }}>
+          <Typography variant='45' textAlign={"center"} sx={{ p: 2 }}>
               Stay In Touch!
           </Typography>
           

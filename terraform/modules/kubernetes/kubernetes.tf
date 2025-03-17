@@ -13,6 +13,9 @@ resource "aws_eks_cluster" "eks_cluster" {
 
   # Ensure the cluster control plane endpoints are private if you are not using public IPs on worker nodes
   # private_access = true # Uncomment if you want private access
+  upgrade_policy {
+    support_type = "STANDARD"
+  }
 
   tags = {
     Name = "eks-cluster"
