@@ -16,19 +16,20 @@ function BlogList({blogs}) {
   const navigate = useNavigate();
 
   
-  const navigateToBlog = (blogData, index) => {
-    navigate(`/blog/${index}`, {state: {blogData}})
+  const navigateToBlog = (blogData, blogId) => {
+    navigate(`/blog/${blogId.split("/")[1]}`, {state: {blogData}})
   }
   return (
     <Grid2 container direction="column" alignItems="center" spacing={2}>
       {blogs &&
         blogs.map((blog, index) => {
-          let parsedBlog = JSON.parse(blog);
+          let blogContent = JSON.parse(blog).content;
+          let blogId = JSON.parse(blog).blogId;
 
           return (
-            <Grid2 key={index} sx={{width: "80%"}}> {/* Added xs={12} */}
+            <Grid2 key={index} sx={{width: "80%"}}>
               <Card sx={{ maxWidth: "100%", textAlign: 'center', alignItems: 'center' }}>
-                <CardActionArea onClick={() => navigateToBlog(parsedBlog, index)}>
+                <CardActionArea onClick={() => navigateToBlog(blogContent, blogId)}>
                   <CardMedia
                     component="img"
                     height="140"
@@ -37,10 +38,10 @@ function BlogList({blogs}) {
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      {parsedBlog[0].sectionHeaderText}
+                      {blogContent[0].sectionHeaderText}
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {parsedBlog[0].sectionSubHeaderText}
+                      {blogContent[0].sectionSubHeaderText}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

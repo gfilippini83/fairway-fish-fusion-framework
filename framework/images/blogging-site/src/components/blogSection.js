@@ -81,10 +81,9 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
 
     const handleFileChange = async (event) => {
         setSelectedFile(event.target.files[0]);
-        console.log(event.target.files[0].name)
         try {
             const ID_TOKEN = JSON.parse(localStorage.getItem('user')).id_token
-            const key = `${uuidv4()}/${event.target.files[0].name}`
+            const key = `images/${event.target.files[0].name}-${Date.now()}`
             await axios.get(`${process.env.REACT_APP_API_GATEWAY_BASE_URL}/get_presigned_url?key=${key}`, { headers: {"Authorization": ID_TOKEN, "Content-Type": "application/json"}}).then( resp => {
                 setKey(key)
                 setPresignedUrl(resp.data.data.url)
@@ -119,7 +118,6 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
             const response = await axios.put(presignedUrl, selectedFile, {headers : { "Content-Type" : selectedFile.type}})
             setFileUploaded(true)
             setFileUploading(false)
-            console.log(response)
         } catch (error) {
             console.error('Error getting presigned URL:', error);
         }

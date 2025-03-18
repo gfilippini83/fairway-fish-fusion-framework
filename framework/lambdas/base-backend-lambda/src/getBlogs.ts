@@ -35,14 +35,20 @@ export class GetBlogsHandler {
                         let content =  await data.Body?.transformToString()
                         console.log(`Content for Key: ${key}, Content: ${content}`)
                         if(content !== undefined) {
-                            let parsedContent = JSON.parse(content)
-                            for( let section of parsedContent) {
-                                if(section.contentType === "Image/Video" || section.contentType === "Image") {
-                                    const url = await this.getKeyPresignedUrl(section.key);
-                                    section.key = url
-                                }
-                            }
-                            enriched_data.push(JSON.stringify(parsedContent))
+                            enriched_data.push(await this.enrichContent(content, key))
+                            // let parsedContent = JSON.parse(content)
+                            // for( let section of parsedContent) {
+                            //     if(section.contentType === "Image/Video" || section.contentType === "Image") {
+                            //         const url = await this.getKeyPresignedUrl(section.key);
+                            //         section.key = url
+                            //     }
+                            // }
+
+                            // const data = {
+                            //     blogId: key,
+                            //     content: parsedContent
+                            // }
+                            // enriched_data.push(JSON.stringify(data))
                         }
                     }
                 }
@@ -57,6 +63,47 @@ export class GetBlogsHandler {
             throw error;
         }
     }
+
+    
+    async getBlogData(key: string) {
+        let response = {}
+        try {
+            const getInput = new GetObjectCommand({
+                Bucket: this.config.private_bucket,
+                Key: key
+            })
+            const data = await this.config.client.send(getInput)
+            let content =  await data.Body?.transformToString()
+            if(content !== undefined) {
+                response = await this.enrichContent(content, key)
+                return response
+            } else {
+                throw Error(`No content found at key`)
+            }
+        } catch(error) {
+            console.log(`There was an error when attempting to grab the blog by key`)
+            throw error
+        }
+    }
+
+    async enrichContent(content: any, key: string): Promise<any> {
+        let enriched_data = []
+        let parsedContent = JSON.parse(content)
+        for( let section of parsedContent) {
+            if(section.contentType === "Image/Video" || section.contentType === "Image") {
+                const url = await this.getKeyPresignedUrl(section.key);
+                section.key = url
+            }
+        }
+
+        const data = {
+            blogId: key,
+            content: parsedContent
+        }
+        enriched_data.push(JSON.stringify(data))
+        return enriched_data
+    }
+
     async getKeyPresignedUrl(key: any) {
         try {
             const command = new GetObjectCommand({
