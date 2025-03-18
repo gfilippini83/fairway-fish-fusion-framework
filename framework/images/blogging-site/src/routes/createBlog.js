@@ -25,10 +25,14 @@ function CreateBlogPage({auth}) {
                   contentType: data.contentType
                 }
                 // If its text, no need for image key
-                if(data.contentType === "Text") {
-                  object["blogText"] = data.blogText
-                } else {
+                if(data.contentType ==="Image") {
                   object["key"] = data.key
+                } else if (data.contentType === "YouTube Link") {
+                  object["youTubeLink"] = data.youTubeLink
+                }else if(data.contentType === "Twitter ID") {
+                  object["twitterId"] = data.twitterId
+                } else {
+                  object["blogText"] = data.blogText
                 }
           
                 if (data.sectionHeaderType !== "None") {

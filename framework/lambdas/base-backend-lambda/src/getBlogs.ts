@@ -37,7 +37,7 @@ export class GetBlogsHandler {
                         if(content !== undefined) {
                             let parsedContent = JSON.parse(content)
                             for( let section of parsedContent) {
-                                if(section.contentType === "Image/Video") {
+                                if(section.contentType === "Image/Video" || section.contentType === "Image") {
                                     const url = await this.getKeyPresignedUrl(section.key);
                                     section.key = url
                                 }

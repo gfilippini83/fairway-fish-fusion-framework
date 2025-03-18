@@ -13,6 +13,7 @@ const textVariants = ["None", "h1", "h2", "h3", "h4", "h5", "h6", "subtitle1", "
 
 
 const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => {
+    
     const [contentType, setContentType] = React.useState('');
     const [sectionHeaderType, setSectionHeader] = React.useState('');
     const [sectionHeaderText, setSectionHeaderText] = React.useState('');
@@ -21,8 +22,10 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [fileUploading, setFileUploading] = React.useState(false);
     const [fileUploaded, setFileUploaded] = React.useState(false);
-    const [blogText, setBlogText] = React.useState("");
+    const [blogText, setBlogText] = React.useState('');
     const [presignedUrl, setPresignedUrl] = React.useState('');
+    const [youTubeLink, setYouTubeLink] = React.useState('');
+    const [twitterId, setTwitterId] = React.useState('');
     const [key, setKey] = React.useState('');
     const fileInputRef = React.useRef(null);
 
@@ -36,6 +39,8 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
                 sectionSubHeaderText,
                 contentType,
                 blogText,
+                youTubeLink,
+                twitterId,
                 key,
             };
 
@@ -93,6 +98,15 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
         setBlogText(event.target.value);
     }
 
+    
+    const handleYouTubeLink = (event)=>{
+        setYouTubeLink(event.target.value);
+    }
+
+    const handleTwitterID = (event)=>{
+        setTwitterId(event.target.value);
+    }
+
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
@@ -128,7 +142,7 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
     const contentTypeDropdown = {
         value: contentType,
         label: "Content Type",
-        options: ["Text", "Image/Video"],
+        options: ["Text", "Image", "YouTube Link", "Twitter ID"],
         onChange: handleContentType
     }
 
@@ -171,11 +185,10 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
                         <DropdownForm dropdownInputs={contentTypeDropdown}/>
                     </Grid>
                     <Grid size={8}>
-                        {contentType ===  "Text" ? <TextareaAutosize style={{width: "100%"}} aria-label="minimum height" minRows={4} placeholder="Insert Blog Text Content" onChange={handleBlogText}/> 
-                        : contentType ===  "Image/Video" ?
-                        <UploadButton buttonInputs={buttonInputs}/>
-                         : <div></div>
-                        }
+                        { contentType ===  "Text" && <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Insert Blog Text Content" onChange={handleBlogText}/> }
+                        { contentType ===  "Image" && <UploadButton buttonInputs={buttonInputs}/> }
+                        { contentType ===  "YouTube Link" && <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Embedded Youtube Link: https://www.youtube.com/watch?v=<ID>" onChange={handleYouTubeLink}/> }
+                        { contentType ===  "Twitter ID" && <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Insert Tweet ID" onChange={handleTwitterID}/> }
                     </Grid>
                     
                     {!fileUploaded && <Grid size={4}> 

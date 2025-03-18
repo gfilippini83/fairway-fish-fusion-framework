@@ -1,0 +1,19 @@
+.video-renderer {
+    position: relative; /* Corrected: Use relative positioning */
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin: 0 auto; /* Added: Centers the video horizontally */
+}
+
+.video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.tweet-container {
+    display: flex;
+    justify-content: center;
+}

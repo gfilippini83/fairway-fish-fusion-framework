@@ -1,6 +1,8 @@
 import { Box, Container, ImageListItem, Typography } from '@mui/material';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import "../css/video.css"
+import { Tweet } from 'react-tweet'
 
 function srcset(image) {
     return {
@@ -9,10 +11,23 @@ function srcset(image) {
     };
   }
 
+function getId(link) {
+    const paramsArr = link.split("?")
+    if(paramsArr.length < 2) {
+        throw Error("No params provided in YouTube Link")
+    }
+    const params = paramsArr[1].split("&")
+    const param = params.find( param => param.includes("v="))
+    return param.replace("v=", "")
+}
+
 function BlogDetails() {
+
+
+
   const location = useLocation();
-  const blogData = location.state?.blogData; // Access blog data from state
-  console.log(blogData)
+  const blogData = location.state?.blogData;
+
   if (!blogData) {
     return <p>Blog not found or data missing</p>;
   }
@@ -50,10 +65,18 @@ function BlogDetails() {
                             <Typography variant={"p"} sx={{ p: { xs: 2, sm: 3, md: 5 } }}>
                                 {data.blogText}
                             </Typography>}
-                            {data.contentType  === "Image/Video" &&
+                            {(data.contentType  === "Image/Video" || data.contentType  === "Image") &&
                                 <ImageListItem key={data.key} cols={1} rows={1}>
                                 <img {...srcset(data.key)} alt={'Holder'} loading="lazy" style={{ width: '100%', height: 'auto' }}/>
                             </ImageListItem>}
+                            {data.contentType  === "YouTube Link" && 
+                            <div className="video-renderer">
+                                <iframe className="video" src={"https://www.youtube.com/embed/" + getId(data.youTubeLink)} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+                            </div>}
+                            {data.contentType  === "Twitter ID" && 
+                            <div className="tweet-container">
+                                <Tweet id={data.twitterId}></Tweet>
+                            </div>}
                         </div>
                      )
                 } else {
@@ -61,6 +84,7 @@ function BlogDetails() {
                 }
             })}
         </Box>
+        
         <Container sx={{p:1}}>  
         </Container>
     </div>
