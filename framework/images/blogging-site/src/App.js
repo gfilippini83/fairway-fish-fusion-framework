@@ -34,7 +34,7 @@ function App() {
       <Container sx={{backgroundColor: 'rgba(29, 34, 36, 0.5)', position: "-webkit-sticky"}} >
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/blog" element={<BlogPage auth={auth}/>} />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/create-blog" element={<ProtectedRoute element={<CreateBlogPage auth={auth} />} />} />
         <Route path="/about-us" element={<AboutUsPage />} />
         <Route path="/logged-in" element={<LoggedInPage />} />
