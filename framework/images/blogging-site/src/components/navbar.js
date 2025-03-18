@@ -78,7 +78,6 @@ function ResponsiveNavBar({auth}) {
       }
     }
   ]
-  //Will do some check here in the future, cookies etc.
   let isLoggedIn = auth.isAuthenticated
   let username = "";
   let groups = [];
@@ -176,10 +175,9 @@ function ResponsiveNavBar({auth}) {
               ))}
               
               { getRolesContains(["blogger", "admin"], groups) &&  
-                <MenuItem key={"Create Blog"} onClick={handleCloseNavMenu}
-              >
-                <Typography onClick={navigateToPage} sx={{ textAlign: 'center' }}>Create Blog</Typography>
-              </MenuItem>
+                <MenuItem key={"Create Blog"} onClick={handleCloseNavMenu}>
+                  <Typography onClick={navigateToPage} sx={{ textAlign: 'center' }}>Create Blog</Typography>
+                </MenuItem>
               }
             </Menu>
           </Box>

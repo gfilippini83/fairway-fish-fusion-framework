@@ -7,6 +7,7 @@ import UploadButton from './uploadButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios'
+import '../css/bouncingLoader.css';
 
 const textVariants = ["None", "h1", "h2", "h3", "h4", "h5", "h6", "subtitle1", "subtitle2", "body1", "body2", "caption", "overline"]
 
@@ -18,30 +19,37 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
     const [sectionSubHeaderText, setSubHeaderText] = React.useState('');
     const [sectionSubHeaderType, setSubHeader] = React.useState('');
     const [selectedFile, setSelectedFile] = React.useState(null);
+    const [fileUploading, setFileUploading] = React.useState(false);
+    const [fileUploaded, setFileUploaded] = React.useState(false);
     const [blogText, setBlogText] = React.useState("");
     const [presignedUrl, setPresignedUrl] = React.useState('');
     const [key, setKey] = React.useState('');
     const fileInputRef = React.useRef(null);
 
+
     const handleSendFormData = () => {
-        const formData = {
-            sectionHeaderType,
-            sectionHeaderText,
-            sectionSubHeaderType,
-            sectionSubHeaderText,
-            contentType,
-            blogText,
-            key
-        };
-        onFormData(id, formData);
+        return new Promise((resolve) => {
+            const formData = {
+                sectionHeaderType,
+                sectionHeaderText,
+                sectionSubHeaderType,
+                sectionSubHeaderText,
+                contentType,
+                blogText,
+                key,
+            };
+
+            onFormData(id, formData);
+            resolve();
+        });
     };
 
     React.useImperativeHandle(ref, () => ({
-        handleSendFormData: handleSendFormData, // Expose the function
+        handleSendFormData: handleSendFormData,
     }));
 
     const handleRemoveClick = () => {
-        onRemove(id); // Call removal callback
+        onRemove(id);
     };
 
     
@@ -93,7 +101,10 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
   
     const sendFilePresignedUrl = async () => {
         try {
+            setFileUploading(true)
             const response = await axios.put(presignedUrl, selectedFile, {headers : { "Content-Type" : selectedFile.type}})
+            setFileUploaded(true)
+            setFileUploading(false)
             console.log(response)
         } catch (error) {
             console.error('Error getting presigned URL:', error);
@@ -137,9 +148,6 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
                     <Grid size={4}> 
                         <DropdownForm dropdownInputs={sectionHeaderDropdown}/>
                     </Grid>
-                    {/* <Grid size={8}> 
-                        <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Insert Section Title Here" onChange={handleSectionHeaderText}/> 
-                    </Grid> */}
                     { sectionHeaderType !== "None" ?
                     <Grid size={8}> 
                         <TextareaAutosize style={{width: "90%"}} aria-label="minimum height" minRows={4} placeholder="Insert Sub-header Here" onChange={handleSectionHeaderText}/> 
@@ -170,9 +178,19 @@ const BlogSectionComponent = forwardRef(({ id, onFormData, onRemove  }, ref) => 
                         }
                     </Grid>
                     
-                    <Grid size={4}> 
+                    {!fileUploaded && <Grid size={4}> 
                         { selectedFile && <Button variant='contained' onClick={sendFilePresignedUrl}>Upload Button</Button>}
-                    </Grid>
+                    </Grid> }
+                    { fileUploading && <Grid size={4}> 
+                        { selectedFile && 
+                            <div className="loader-container">
+                                <div className="bouncing-square"></div>
+                            </div>
+                        }
+                    </Grid> }
+                    { fileUploaded && <Grid size={4}> 
+                        { selectedFile && <div>Uploaded Successfully!</div>}
+                    </Grid> }
                     <Grid size={8}> 
                         <div></div>
                     </Grid>
