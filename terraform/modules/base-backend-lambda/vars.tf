@@ -4,15 +4,15 @@ variable "env" {
 }
 
 variable "cognito_client_id" {
-  type = string
+  type        = string
   description = "String value with the client ID for the cognito pool"
-  
+
 }
 
 variable "cognito_user_pool_id" {
-  type = string
+  type        = string
   description = "String value with the cognito user pool ID for the cognito pool"
-  
+
 }
 
 variable "private_vpc_subnets" {
