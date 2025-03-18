@@ -24,7 +24,7 @@ function CreateBlogPage({auth}) {
                 let object = {
                   contentType: data.contentType
                 }
-                // If its text, no need for image key
+                
                 if(data.contentType ==="Image") {
                   object["key"] = data.key
                 } else if (data.contentType === "YouTube Link") {
@@ -65,7 +65,7 @@ function CreateBlogPage({auth}) {
   const handleAddComponent = () => {
     setComponentsData((prevData) => [
         ...prevData,
-        { id: componentCounter, formData: null }, // Initialize with null formData
+        { id: componentCounter, formData: null },
     ]);
     setComponentCounter(componentCounter + 1);
   };

@@ -23,8 +23,6 @@ function getId(link) {
 
 function BlogDetails() {
 
-
-
   const location = useLocation();
   const blogData = location.state?.blogData;
 
