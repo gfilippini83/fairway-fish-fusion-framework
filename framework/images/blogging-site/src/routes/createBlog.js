@@ -16,7 +16,6 @@ function CreateBlogPage({auth}) {
 
     React.useEffect(() => {
         if (allFormDataUpdated) {
-            console.log(componentsData);
 
             let sections = [];
             componentsData.forEach((form) => {
@@ -49,7 +48,6 @@ function CreateBlogPage({auth}) {
             });
 
             const ID_TOKEN = JSON.parse(localStorage.getItem('user')).id_token;
-            console.log(sections);
             sendToApi(sections, ID_TOKEN).then(res => {
               if(res) {
                 console.log(res)

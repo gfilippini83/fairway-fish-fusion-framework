@@ -12,3 +12,8 @@ export async function getPaginatedBlogs(cursor=undefined, limit=20) {
     }
     return await axios.get(getUrl)
 }
+
+export async function getBlogByKey(key) {
+    let getUrl = `${process.env.REACT_APP_API_GATEWAY_BASE_URL}/get_blogs?key=blogs/${key}`
+    return await axios.get(getUrl)
+}

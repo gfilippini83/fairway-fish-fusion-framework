@@ -2,7 +2,7 @@
 import './App.css';
 import ResponsiveNavBar from './components/navbar';
 import { Container } from '@mui/material';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom';
 import AboutUsPage from './routes/aboutUs';
 import BlogPage from './routes/blog';
 import LandingPage from './routes/landing';
@@ -27,22 +27,36 @@ function App() {
     return <div>Encountering error... {auth.error.message}</div>;
   }
 
+  const Layout = () => {
+    
+    console.log("Loaded App.js")
+    return (
+    <div className="App">
+        <ResponsiveNavBar auth={auth} />
+        <Container sx={{ backgroundColor: 'rgba(29, 34, 36, 0.5)', position: "-webkit-sticky" }}>
+            <Outlet />
+        </Container>
+    </div>
+)};
+
   return (
     <Router>
-    <div className="App">
+    {/* <div className="App">
       <ResponsiveNavBar auth={auth} />
-      <Container sx={{backgroundColor: 'rgba(29, 34, 36, 0.5)', position: "-webkit-sticky"}} >
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/create-blog" element={<ProtectedRoute element={<CreateBlogPage auth={auth} />} />} />
-        <Route path="/about-us" element={<AboutUsPage />} />
-        <Route path="/logged-in" element={<LoggedInPage />} />
-        <Route path="/logged-out" element={<LoggedOutPage />} />
-        <Route path="/blog/:blogId" element={<BlogDetails />} /> {/* Route for blog details */}
-      </Routes>
-      </Container>
-    </div>
+      <Container sx={{backgroundColor: 'rgba(29, 34, 36, 0.5)', position: "-webkit-sticky"}} > */}
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/create-blog" element={<ProtectedRoute element={<CreateBlogPage auth={auth} />} />} />
+            <Route path="/about-us" element={<AboutUsPage />} />
+            <Route path="/logged-in" element={<LoggedInPage />} />
+            <Route path="/logged-out" element={<LoggedOutPage />} />
+            <Route path="/blog/:blogId" element={<BlogDetails />} /> {/* Route for blog details */}
+          </Route>
+        </Routes>
+      {/* </Container>
+    </div> */}
     </Router>
   );
 }
