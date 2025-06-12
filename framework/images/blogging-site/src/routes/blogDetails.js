@@ -1,8 +1,9 @@
 import { Box, Container, ImageListItem, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import "../css/video.css"
 import { Tweet } from 'react-tweet'
+import { getBlogByKey } from '../service/backendService';
 
 function srcset(image) {
     return {
@@ -23,18 +24,31 @@ function getId(link) {
 
 function BlogDetails() {
 
+  const [blogData, setBlogData] = useState(undefined)
+  const [isLoading, setIsLoading] = useState(true)
   const location = useLocation();
-  const blogData = location.state?.blogData;
+  const key = location.pathname.slice(6);
 
-  if (!blogData) {
-    return <p>Blog not found or data missing</p>;
-  }
+    useEffect(() => {
+        const fetchData = async () => {
+            if (location.state?.blogData) {
+                setBlogData(location.state.blogData);
+                setIsLoading(false);
+                console.log("Data Fetched")
+            } else {
+                const data = await getBlogByKey(key);
+                setBlogData(JSON.parse(data.data[0]).content);
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+    }, [key, location.state?.blogData]);
 
   return (
     <div>     
         <Container sx={{p:1}}>  
         </Container>
-        <Box sx={{bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: '16px', p: { xs: 3, sm: 8, md: 15 }}}>
+        {isLoading === false && <Box sx={{bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: '16px', p: { xs: 3, sm: 8, md: 15 }}}>
             <Typography variant={blogData[0].sectionHeaderType} sx={{ p: { xs: 2, sm: 3, md: 5 } }}>
                 {blogData[0].sectionHeaderText}
             </Typography>
@@ -52,7 +66,7 @@ function BlogDetails() {
             {blogData.map((data, index) => {
                 if(index !== 0) {
                     return ( 
-                        <div>
+                        <div key={data.key || index}>
                             <Typography variant={data.sectionHeaderType} sx={{ p: { xs: 2, sm: 3, md: 5 } }}>
                                 {data.sectionHeaderText}
                             </Typography>
@@ -78,10 +92,10 @@ function BlogDetails() {
                         </div>
                      )
                 } else {
-                    return (<div></div>)
+                    return (<div key={data.key || index}></div>)
                 }
             })}
-        </Box>
+        </Box>}
         
         <Container sx={{p:1}}>  
         </Container>

@@ -47,6 +47,10 @@ export const handler = async (
         } else if(event.path.includes("get_blogs") && event.httpMethod.toUpperCase() === "GET"){ 
             const limit = event.queryStringParameters?.limit;
             const cursor = event.queryStringParameters?.cursor;
+            const key = event.queryStringParameters?.key;
+            if(key) {
+                return wrap(await getBlogsHandler.getBlogData(key))
+            }
             const paginated_blogs = (limit !== undefined) ? await getBlogsHandler.getPaginatedObjects(parseInt(limit), cursor) : await getBlogsHandler.getPaginatedObjects(20, cursor)
             return wrap(paginated_blogs)
         } else {
